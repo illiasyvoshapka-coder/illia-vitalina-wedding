@@ -50,22 +50,6 @@ body{font-family:'Montserrat',sans-serif;background:var(--cream);color:var(--dar
 .edit-toggle:hover{background:var(--red2);}
 [contenteditable="true"]{outline:1.5px dashed var(--red);border-radius:2px;background:rgba(192,57,43,.06);cursor:text;}
 
-/* ── ADMIN PANEL ── */
-#admin-panel{display:none;position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,.6);overflow-y:auto;padding:20px;}
-.admin-inner{background:#fff;max-width:780px;margin:0 auto;border-radius:8px;padding:32px;position:relative;}
-.admin-inner h2{font-family:'Cormorant Garamond',serif;font-size:28px;margin-bottom:20px;}
-.admin-close{position:absolute;top:16px;right:20px;font-size:22px;cursor:pointer;color:var(--muted);background:none;border:none;}
-.resp-card{border:.5px solid #e0d0d0;border-radius:6px;padding:16px 20px;margin-bottom:14px;background:#faf7f5;}
-.resp-name{font-weight:500;font-size:15px;margin-bottom:6px;}
-.resp-row{font-size:12px;color:var(--muted);margin-bottom:3px;}
-.badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:500;margin-left:6px;}
-.badge-yes{background:#d4edda;color:#155724;}
-.badge-no{background:#f8d7da;color:#721c24;}
-.no-resp{text-align:center;color:var(--muted);font-size:14px;padding:40px 0;}
-.admin-btn{background:var(--red);color:#fff;border:none;padding:8px 22px;border-radius:4px;cursor:pointer;font-size:12px;font-family:'Montserrat',sans-serif;margin-right:10px;}
-.fab-admin{position:fixed;bottom:28px;right:28px;z-index:1500;background:var(--dark);color:#fff;border:none;border-radius:50%;width:52px;height:52px;font-size:20px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center;}
-.fab-admin:hover{background:var(--red);}
-
 /* ── MARQUEE ── */
 .script-wrap{overflow:hidden;padding:14px 0;background:var(--cream);}
 .script{font-family:'Dancing Script',cursive;color:var(--red);font-size:clamp(24px,4vw,34px);white-space:nowrap;animation:marquee 20s linear infinite;display:inline-block;}
@@ -225,24 +209,7 @@ footer strong{color:#e8cece;}
 <div class="edit-bar">
   <span id="edit-status">✦ ilya-vitalina.ru</span>
   <div style="display:flex;gap:10px;align-items:center;">
-    <button class="edit-toggle" style="background:rgba(255,255,255,.15);color:#fff;" onclick="openAdmin()">📋 Анкеты</button>
     <button class="edit-toggle" id="editBtn" onclick="toggleEdit()">Редактировать</button>
-  </div>
-</div>
-
-<!-- FAB -->
-<button class="fab-admin" onclick="openAdmin()" title="Анкеты">📋</button>
-
-<!-- ADMIN PANEL -->
-<div id="admin-panel">
-  <div class="admin-inner">
-    <button class="admin-close" onclick="closeAdmin()">✕</button>
-    <h2>Анкеты гостей</h2>
-    <div style="margin-bottom:20px;display:flex;gap:10px;flex-wrap:wrap;">
-      <button class="admin-btn" onclick="exportCSV()">⬇ Скачать CSV</button>
-      <button class="admin-btn" style="background:#888;" onclick="clearAll()">🗑 Очистить</button>
-    </div>
-    <div id="responses-list"></div>
   </div>
 </div>
 
@@ -486,6 +453,8 @@ footer strong{color:#e8cece;}
 </div><!-- end #main-content -->
 
 <script>
+const RSVP_API='https://na3walny0e.execute-api.us-east-1.amazonaws.com/prod/wedding-info';
+
 // ── INTRO ──
 function openSite(){
   const intro=document.getElementById('intro-screen');
@@ -523,8 +492,8 @@ function togglePlusOneField(){
 }
 document.querySelectorAll('input[name="attend"]').forEach(r=>r.addEventListener('change',togglePlusOneField));
 
-// ── FORM ──
-function submitForm(){
+// ── FORM ── (payload matches backend FormResponse: id, name, attend, plusOne, alco, tracks, date)
+async function submitForm(){
   const name=document.getElementById('f-name').value.trim();
   const attendEl=document.querySelector('input[name="attend"]:checked');
   if(!name){alert('Пожалуйста, введите ваше имя');return;}
@@ -534,38 +503,33 @@ function submitForm(){
   const plusOne=document.getElementById('plus-one').value.trim();
   if(alco.includes('Другое')&&otherVal) alco=alco.map(v=>v==='Другое'?'Другое: '+otherVal:v);
   const tracks=document.getElementById('f-tracks').value.trim();
-  const resp={id:Date.now(),name,attend:attendEl.value,plusOne,alco:alco.join(', '),tracks,date:new Date().toLocaleString('ru')};
-  const stored=JSON.parse(localStorage.getItem('iv_responses')||'[]');
-  stored.push(resp);
-  localStorage.setItem('iv_responses',JSON.stringify(stored));
+  const payload={id:Date.now(),name,attend:attendEl.value,plusOne,alco:alco.join(', '),tracks,date:new Date().toLocaleString('ru')};
   const btn=document.getElementById('sbtn');
-  btn.textContent='✦ Спасибо! Ответ сохранён';btn.style.background='#2ecc71';
-  document.getElementById('f-name').value='';document.getElementById('f-tracks').value='';document.getElementById('other-drink').value='';document.getElementById('plus-one').value='';
-  document.querySelectorAll('.alco').forEach(c=>c.checked=false);
-  document.querySelectorAll('input[name="attend"]').forEach(r=>r.checked=false);
-  document.getElementById('other-drink-wrap').style.display='none';
-  document.getElementById('plus-one-wrap').style.display='none';
-  setTimeout(()=>{btn.textContent='Отправить';btn.style.background='';},4000);
+  const prevText=btn.textContent;
+  btn.disabled=true;btn.textContent='Отправка…';
+  try{
+    const res=await fetch(RSVP_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    let msg='Не удалось отправить';
+    try{
+      const data=await res.json();
+      if(data&&data.error)msg=data.error;
+      else if(!res.ok)msg=typeof data==='string'?data:JSON.stringify(data);
+    }catch(_){ if(!res.ok)msg='Ошибка сервера ('+res.status+')'; }
+    if(!res.ok){alert(msg);return;}
+    btn.textContent='✦ Спасибо! Ответ отправлен';btn.style.background='#2ecc71';
+    document.getElementById('f-name').value='';document.getElementById('f-tracks').value='';document.getElementById('other-drink').value='';document.getElementById('plus-one').value='';
+    document.querySelectorAll('.alco').forEach(c=>c.checked=false);
+    document.querySelectorAll('input[name="attend"]').forEach(r=>r.checked=false);
+    document.getElementById('other-drink-wrap').style.display='none';
+    document.getElementById('plus-one-wrap').style.display='none';
+    setTimeout(()=>{btn.textContent=prevText;btn.style.background='';},4000);
+  }catch(e){
+    alert('Нет связи с сервером. Проверьте интернет и попробуйте снова.');
+  }finally{
+    btn.disabled=false;
+    if(btn.textContent==='Отправка…')btn.textContent=prevText;
+  }
 }
-
-// ── ADMIN ──
-function openAdmin(){
-  const stored=JSON.parse(localStorage.getItem('iv_responses')||'[]');
-  const list=document.getElementById('responses-list');
-  if(!stored.length){list.innerHTML='<div class="no-resp">Ответов пока нет</div>';}
-  else{list.innerHTML=stored.map(r=>`<div class="resp-card"><div class="resp-name">${r.name}<span class="badge ${r.attend==='yes'?'badge-yes':'badge-no'}">${r.attend==='yes'?'Придёт':'Не придёт'}</span></div><div class="resp-row">👥 ${r.plusOne||'—'}</div><div class="resp-row">🥂 ${r.alco||'—'}</div><div class="resp-row">🎵 ${r.tracks||'—'}</div><div class="resp-row" style="font-size:11px;color:#aaa;margin-top:6px;">📅 ${r.date}</div></div>`).join('');}
-  document.getElementById('admin-panel').style.display='block';document.body.style.overflow='hidden';
-}
-function closeAdmin(){document.getElementById('admin-panel').style.display='none';document.body.style.overflow='';}
-function clearAll(){if(confirm('Удалить все ответы?')){localStorage.removeItem('iv_responses');openAdmin();}}
-function exportCSV(){
-  const stored=JSON.parse(localStorage.getItem('iv_responses')||'[]');
-  if(!stored.length){alert('Нет данных');return;}
-  const rows=[['Имя','Придёт','Со мной также будет','Алкоголь','Треки','Дата'],...stored.map(r=>[r.name,r.attend==='yes'?'Да':'Нет',r.plusOne||'',r.alco,r.tracks,r.date])];
-  const csv=rows.map(r=>r.map(v=>`"${(v||'').replace(/"/g,'""')}"`).join(',')).join('\n');
-  const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);a.download='ankety.csv';a.click();
-}
-document.getElementById('admin-panel').addEventListener('click',function(e){if(e.target===this)closeAdmin();});
 
 // ── EDIT MODE ──
 let editMode=false;
