@@ -117,20 +117,20 @@ func jsonResponse(status int, body any) events.APIGatewayProxyResponse {
 	}
 }
 
-func decodeBody(req events.APIGatewayProxyRequest) (string, error) {
-	body := req.Body
-	if req.IsBase64Encoded {
-		raw, err := base64.StdEncoding.DecodeString(body)
-		if err != nil {
-			return "", err
-		}
-		body = string(raw)
+func decodeRawBody(body string, isBase64 bool) (string, error) {
+	if !isBase64 {
+		return body, nil
 	}
-	return body, nil
+	raw, err := base64.StdEncoding.DecodeString(body)
+	if err != nil {
+		return "", err
+	}
+	return string(raw), nil
 }
 
-func handle(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	if strings.EqualFold(req.HTTPMethod, "OPTIONS") {
+// coreHandler runs after API Gateway event is normalized (method + JSON body).
+func coreHandler(ctx context.Context, method, rawBody string) (events.APIGatewayProxyResponse, error) {
+	if strings.EqualFold(method, "OPTIONS") {
 		return events.APIGatewayProxyResponse{
 			StatusCode: 204,
 			Headers:    corsHeaders(),
@@ -138,19 +138,14 @@ func handle(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIG
 		}, nil
 	}
 
-	if !strings.EqualFold(req.HTTPMethod, "POST") {
+	if !strings.EqualFold(method, "POST") {
+		log.Printf("reject method=%q (expected POST)", method)
 		return jsonResponse(405, map[string]any{"ok": false, "error": "method not allowed"}), nil
 	}
 
-	raw, err := decodeBody(req)
-	if err != nil {
-		log.Printf("decode body: %v", err)
-		return jsonResponse(400, map[string]any{"ok": false, "error": "invalid body encoding"}), nil
-	}
-
 	var payload FormResponse
-	if err := json.Unmarshal([]byte(raw), &payload); err != nil {
-		log.Printf("json: %v", err)
+	if err := json.Unmarshal([]byte(rawBody), &payload); err != nil {
+		log.Printf("json: %v body_prefix=%q", err, trimForLog(rawBody, 200))
 		return jsonResponse(400, map[string]any{"ok": false, "error": "invalid json"}), nil
 	}
 
@@ -186,6 +181,54 @@ func handle(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIG
 	log.Printf("rsvp saved id=%s name=%q attend=%s", rowID, payload.Name, payload.Attend)
 
 	return jsonResponse(200, map[string]any{"ok": true, "id": rowID}), nil
+}
+
+func trimForLog(s string, max int) string {
+	if len(s) <= max {
+		return s
+	}
+	return s[:max] + "…"
+}
+
+// handle unmarshals either REST API (v1) or HTTP API (v2) payloads. Using only
+// APIGatewayProxyRequest breaks HTTP API: httpMethod lives under requestContext.http.method.
+func handle(ctx context.Context, raw json.RawMessage) (events.APIGatewayProxyResponse, error) {
+	var probe struct {
+		Version string `json:"version"`
+	}
+	if err := json.Unmarshal(raw, &probe); err != nil {
+		log.Printf("probe event: %v", err)
+		return jsonResponse(500, map[string]any{"ok": false, "error": "bad event"}), nil
+	}
+
+	if probe.Version == "2.0" {
+		var req events.APIGatewayV2HTTPRequest
+		if err := json.Unmarshal(raw, &req); err != nil {
+			log.Printf("apigw v2 unmarshal: %v", err)
+			return jsonResponse(500, map[string]any{"ok": false, "error": "bad event"}), nil
+		}
+		method := req.RequestContext.HTTP.Method
+		log.Printf("apigw v2 method=%q route=%q rawPath=%q body_len=%d", method, req.RouteKey, req.RawPath, len(req.Body))
+		body, err := decodeRawBody(req.Body, req.IsBase64Encoded)
+		if err != nil {
+			log.Printf("decode body: %v", err)
+			return jsonResponse(400, map[string]any{"ok": false, "error": "invalid body encoding"}), nil
+		}
+		return coreHandler(ctx, method, body)
+	}
+
+	var req events.APIGatewayProxyRequest
+	if err := json.Unmarshal(raw, &req); err != nil {
+		log.Printf("apigw v1 unmarshal: %v", err)
+		return jsonResponse(500, map[string]any{"ok": false, "error": "bad event"}), nil
+	}
+	log.Printf("apigw v1 method=%q path=%q body_len=%d", req.HTTPMethod, req.Path, len(req.Body))
+	body, err := decodeRawBody(req.Body, req.IsBase64Encoded)
+	if err != nil {
+		log.Printf("decode body: %v", err)
+		return jsonResponse(400, map[string]any{"ok": false, "error": "invalid body encoding"}), nil
+	}
+	return coreHandler(ctx, req.HTTPMethod, body)
 }
 
 func main() {
