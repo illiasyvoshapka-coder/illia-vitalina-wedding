@@ -187,6 +187,7 @@ body{font-family:'Montserrat',sans-serif;background:var(--cream);color:var(--dar
 .check-i{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--dark);}
 .check-i input{accent-color:var(--red);}
 #other-drink-wrap{margin-top:12px;display:none;}
+#plus-one-wrap{margin-top:12px;display:none;}
 .sbtn{width:100%;background:var(--red);color:#fff;border:none;padding:15px;font-family:'Montserrat',sans-serif;font-size:12px;letter-spacing:3px;text-transform:uppercase;font-weight:500;cursor:pointer;border-radius:2px;margin-top:10px;}
 .sbtn:hover{background:var(--red2);}
 
@@ -449,6 +450,9 @@ footer strong{color:#e8cece;}
         <label class="radio-i"><input type="radio" name="attend" value="yes"> Да, буду рад(а) вас поздравить</label>
         <label class="radio-i"><input type="radio" name="attend" value="no"> К сожалению, не смогу присутствовать</label>
       </div>
+      <div id="plus-one-wrap">
+        <input type="text" id="plus-one" placeholder="Со мной также будет...">
+      </div>
     </div>
     <div class="ff">
       <label>3. Предпочтения по алкоголю</label>
@@ -508,6 +512,17 @@ function toggleOther(cb){
   if(!cb.checked) document.getElementById('other-drink').value='';
 }
 
+// ── PLUS ONE ──
+function togglePlusOneField(){
+  const attendEl=document.querySelector('input[name="attend"]:checked');
+  const wrap=document.getElementById('plus-one-wrap');
+  const input=document.getElementById('plus-one');
+  const show=attendEl&&attendEl.value==='yes';
+  wrap.style.display=show?'block':'none';
+  if(!show) input.value='';
+}
+document.querySelectorAll('input[name="attend"]').forEach(r=>r.addEventListener('change',togglePlusOneField));
+
 // ── FORM ──
 function submitForm(){
   const name=document.getElementById('f-name').value.trim();
@@ -516,18 +531,20 @@ function submitForm(){
   if(!attendEl){alert('Пожалуйста, укажите, придёте ли вы');return;}
   let alco=[...document.querySelectorAll('.alco:checked')].map(c=>c.value);
   const otherVal=document.getElementById('other-drink').value.trim();
+  const plusOne=document.getElementById('plus-one').value.trim();
   if(alco.includes('Другое')&&otherVal) alco=alco.map(v=>v==='Другое'?'Другое: '+otherVal:v);
   const tracks=document.getElementById('f-tracks').value.trim();
-  const resp={id:Date.now(),name,attend:attendEl.value,alco:alco.join(', '),tracks,date:new Date().toLocaleString('ru')};
+  const resp={id:Date.now(),name,attend:attendEl.value,plusOne,alco:alco.join(', '),tracks,date:new Date().toLocaleString('ru')};
   const stored=JSON.parse(localStorage.getItem('iv_responses')||'[]');
   stored.push(resp);
   localStorage.setItem('iv_responses',JSON.stringify(stored));
   const btn=document.getElementById('sbtn');
   btn.textContent='✦ Спасибо! Ответ сохранён';btn.style.background='#2ecc71';
-  document.getElementById('f-name').value='';document.getElementById('f-tracks').value='';document.getElementById('other-drink').value='';
+  document.getElementById('f-name').value='';document.getElementById('f-tracks').value='';document.getElementById('other-drink').value='';document.getElementById('plus-one').value='';
   document.querySelectorAll('.alco').forEach(c=>c.checked=false);
   document.querySelectorAll('input[name="attend"]').forEach(r=>r.checked=false);
   document.getElementById('other-drink-wrap').style.display='none';
+  document.getElementById('plus-one-wrap').style.display='none';
   setTimeout(()=>{btn.textContent='Отправить';btn.style.background='';},4000);
 }
 
@@ -536,7 +553,7 @@ function openAdmin(){
   const stored=JSON.parse(localStorage.getItem('iv_responses')||'[]');
   const list=document.getElementById('responses-list');
   if(!stored.length){list.innerHTML='<div class="no-resp">Ответов пока нет</div>';}
-  else{list.innerHTML=stored.map(r=>`<div class="resp-card"><div class="resp-name">${r.name}<span class="badge ${r.attend==='yes'?'badge-yes':'badge-no'}">${r.attend==='yes'?'Придёт':'Не придёт'}</span></div><div class="resp-row">🥂 ${r.alco||'—'}</div><div class="resp-row">🎵 ${r.tracks||'—'}</div><div class="resp-row" style="font-size:11px;color:#aaa;margin-top:6px;">📅 ${r.date}</div></div>`).join('');}
+  else{list.innerHTML=stored.map(r=>`<div class="resp-card"><div class="resp-name">${r.name}<span class="badge ${r.attend==='yes'?'badge-yes':'badge-no'}">${r.attend==='yes'?'Придёт':'Не придёт'}</span></div><div class="resp-row">👥 ${r.plusOne||'—'}</div><div class="resp-row">🥂 ${r.alco||'—'}</div><div class="resp-row">🎵 ${r.tracks||'—'}</div><div class="resp-row" style="font-size:11px;color:#aaa;margin-top:6px;">📅 ${r.date}</div></div>`).join('');}
   document.getElementById('admin-panel').style.display='block';document.body.style.overflow='hidden';
 }
 function closeAdmin(){document.getElementById('admin-panel').style.display='none';document.body.style.overflow='';}
@@ -544,7 +561,7 @@ function clearAll(){if(confirm('Удалить все ответы?')){localStor
 function exportCSV(){
   const stored=JSON.parse(localStorage.getItem('iv_responses')||'[]');
   if(!stored.length){alert('Нет данных');return;}
-  const rows=[['Имя','Придёт','Алкоголь','Треки','Дата'],...stored.map(r=>[r.name,r.attend==='yes'?'Да':'Нет',r.alco,r.tracks,r.date])];
+  const rows=[['Имя','Придёт','Со мной также будет','Алкоголь','Треки','Дата'],...stored.map(r=>[r.name,r.attend==='yes'?'Да':'Нет',r.plusOne||'',r.alco,r.tracks,r.date])];
   const csv=rows.map(r=>r.map(v=>`"${(v||'').replace(/"/g,'""')}"`).join(',')).join('\n');
   const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);a.download='ankety.csv';a.click();
 }
