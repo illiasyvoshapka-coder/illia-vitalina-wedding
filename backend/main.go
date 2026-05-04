@@ -1,11 +1,13 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"encoding/base64"
 	"encoding/json"
 	"log"
 	"os"
+	"sort"
 	"strings"
 	"sync"
 
@@ -138,11 +140,6 @@ func coreHandler(ctx context.Context, method, rawBody string) (events.APIGateway
 		}, nil
 	}
 
-	if !strings.EqualFold(method, "POST") {
-		log.Printf("reject method=%q (expected POST)", method)
-		return jsonResponse(405, map[string]any{"ok": false, "error": "method not allowed"}), nil
-	}
-
 	var payload FormResponse
 	if err := json.Unmarshal([]byte(rawBody), &payload); err != nil {
 		log.Printf("json: %v body_prefix=%q", err, trimForLog(rawBody, 200))
@@ -190,45 +187,120 @@ func trimForLog(s string, max int) string {
 	return s[:max] + "…"
 }
 
-// handle unmarshals either REST API (v1) or HTTP API (v2) payloads. Using only
-// APIGatewayProxyRequest breaks HTTP API: httpMethod lives under requestContext.http.method.
-func handle(ctx context.Context, raw json.RawMessage) (events.APIGatewayProxyResponse, error) {
-	var probe struct {
-		Version string `json:"version"`
+// apigwFlexible unmarshals both HTTP API (v2) and REST proxy (v1) payloads: v1 uses
+// top-level httpMethod/path; v2 uses rawPath and requestContext.http.{method,path}.
+// Body is json.RawMessage so a JSON string body does not fail unmarshaling when we
+// also need to accept object-shaped bodies from some HTTP triggers (see bodyFromEvent).
+type apigwFlexible struct {
+	Body            json.RawMessage `json:"body"`
+	IsBase64Encoded bool            `json:"isBase64Encoded"`
+	HTTPMethod      string          `json:"httpMethod"`
+	Path            string          `json:"path"`
+	RawPath         string          `json:"rawPath"`
+	RequestContext  struct {
+		HTTP struct {
+			Method string `json:"method"`
+			Path   string `json:"path"`
+		} `json:"http"`
+	} `json:"requestContext"`
+}
+
+func normalizeMethodPath(ev *apigwFlexible) (method, path string) {
+	method = ev.RequestContext.HTTP.Method
+	if method == "" {
+		method = ev.HTTPMethod
 	}
-	if err := json.Unmarshal(raw, &probe); err != nil {
-		log.Printf("probe event: %v", err)
-		return jsonResponse(500, map[string]any{"ok": false, "error": "bad event"}), nil
+	path = ev.RawPath
+	if path == "" {
+		path = ev.RequestContext.HTTP.Path
+	}
+	if path == "" {
+		path = ev.Path
+	}
+	return method, path
+}
+
+// bodyFromEvent returns the HTTP body before base64 decoding. API Gateway sends body
+// as a JSON string; some platforms send a JSON object (same shape as FormResponse).
+func bodyFromEvent(raw json.RawMessage) string {
+	raw = bytes.TrimSpace(raw)
+	if len(raw) == 0 {
+		return ""
+	}
+	var s string
+	if err := json.Unmarshal(raw, &s); err == nil {
+		return s
+	}
+	return string(raw)
+}
+
+func looksLikeFormPayload(b []byte) bool {
+	var m map[string]json.RawMessage
+	if err := json.Unmarshal(b, &m); err != nil {
+		return false
+	}
+	_, hasName := m["name"]
+	_, hasAttend := m["attend"]
+	return hasName && hasAttend
+}
+
+func topLevelKeysJSON(b []byte) []string {
+	var m map[string]json.RawMessage
+	if err := json.Unmarshal(b, &m); err != nil {
+		return nil
+	}
+	keys := make([]string, 0, len(m))
+	for k := range m {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	return keys
+}
+
+// handle follows the same []byte I/O style as backend/example/handler.go Invoke:
+// raw JSON in, JSON-marshaled API Gateway response out. That matches API Gateway
+// and several HTTP-style function runtimes.
+func handle(ctx context.Context, payload []byte) ([]byte, error) {
+	if os.Getenv("WEDDING_DEBUG_PAYLOAD") == "1" {
+		log.Printf("payload len=%d keys=%v prefix=%s", len(payload), topLevelKeysJSON(payload), trimForLog(string(payload), 800))
 	}
 
-	if probe.Version == "2.0" {
-		var req events.APIGatewayV2HTTPRequest
-		if err := json.Unmarshal(raw, &req); err != nil {
-			log.Printf("apigw v2 unmarshal: %v", err)
-			return jsonResponse(500, map[string]any{"ok": false, "error": "bad event"}), nil
-		}
-		method := req.RequestContext.HTTP.Method
-		log.Printf("apigw v2 method=%q route=%q rawPath=%q body_len=%d", method, req.RouteKey, req.RawPath, len(req.Body))
-		body, err := decodeRawBody(req.Body, req.IsBase64Encoded)
-		if err != nil {
-			log.Printf("decode body: %v", err)
-			return jsonResponse(400, map[string]any{"ok": false, "error": "invalid body encoding"}), nil
-		}
-		return coreHandler(ctx, method, body)
+	var ev apigwFlexible
+	if err := json.Unmarshal(payload, &ev); err != nil {
+		log.Printf("apigw unmarshal: %v", err)
+		return marshalProxy(jsonResponse(500, map[string]any{"ok": false, "error": "bad event"}))
 	}
 
-	var req events.APIGatewayProxyRequest
-	if err := json.Unmarshal(raw, &req); err != nil {
-		log.Printf("apigw v1 unmarshal: %v", err)
-		return jsonResponse(500, map[string]any{"ok": false, "error": "bad event"}), nil
+	method, path := normalizeMethodPath(&ev)
+	bodyStr := bodyFromEvent(ev.Body)
+	isB64 := ev.IsBase64Encoded
+
+	// Non-proxy or test events: whole event is the RSVP JSON (name + attend at top level).
+	if strings.TrimSpace(bodyStr) == "" && looksLikeFormPayload(payload) {
+		bodyStr = string(bytes.TrimSpace(payload))
+		if method == "" {
+			method = "POST"
+		}
+		log.Printf("apigw: envelope had empty body; using top-level JSON as RSVP body")
 	}
-	log.Printf("apigw v1 method=%q path=%q body_len=%d", req.HTTPMethod, req.Path, len(req.Body))
-	body, err := decodeRawBody(req.Body, req.IsBase64Encoded)
+
+	log.Printf("apigw method=%q path=%q body_len=%d isB64=%v", method, path, len(bodyStr), isB64)
+
+	decoded, err := decodeRawBody(bodyStr, isB64)
 	if err != nil {
 		log.Printf("decode body: %v", err)
-		return jsonResponse(400, map[string]any{"ok": false, "error": "invalid body encoding"}), nil
+		return marshalProxy(jsonResponse(400, map[string]any{"ok": false, "error": "invalid body encoding"}))
 	}
-	return coreHandler(ctx, req.HTTPMethod, body)
+
+	resp, err := coreHandler(ctx, method, decoded)
+	if err != nil {
+		return nil, err
+	}
+	return marshalProxy(resp)
+}
+
+func marshalProxy(r events.APIGatewayProxyResponse) ([]byte, error) {
+	return json.Marshal(r)
 }
 
 func main() {
