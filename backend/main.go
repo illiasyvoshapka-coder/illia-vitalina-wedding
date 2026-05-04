@@ -257,10 +257,7 @@ func topLevelKeysJSON(b []byte) []string {
 	return keys
 }
 
-// handle follows the same []byte I/O style as backend/example/handler.go Invoke:
-// raw JSON in, JSON-marshaled API Gateway response out. That matches API Gateway
-// and several HTTP-style function runtimes.
-func handle(ctx context.Context, payload []byte) ([]byte, error) {
+func handle(ctx context.Context, payload json.RawMessage) (events.APIGatewayProxyResponse, error) {
 	if os.Getenv("WEDDING_DEBUG_PAYLOAD") == "1" {
 		log.Printf("payload len=%d keys=%v prefix=%s", len(payload), topLevelKeysJSON(payload), trimForLog(string(payload), 800))
 	}
@@ -268,7 +265,7 @@ func handle(ctx context.Context, payload []byte) ([]byte, error) {
 	var ev apigwFlexible
 	if err := json.Unmarshal(payload, &ev); err != nil {
 		log.Printf("apigw unmarshal: %v", err)
-		return marshalProxy(jsonResponse(500, map[string]any{"ok": false, "error": "bad event"}))
+		return jsonResponse(500, map[string]any{"ok": false, "error": "bad event"}), nil
 	}
 
 	method, path := normalizeMethodPath(&ev)
@@ -289,18 +286,10 @@ func handle(ctx context.Context, payload []byte) ([]byte, error) {
 	decoded, err := decodeRawBody(bodyStr, isB64)
 	if err != nil {
 		log.Printf("decode body: %v", err)
-		return marshalProxy(jsonResponse(400, map[string]any{"ok": false, "error": "invalid body encoding"}))
+		return jsonResponse(400, map[string]any{"ok": false, "error": "invalid body encoding"}), nil
 	}
 
-	resp, err := coreHandler(ctx, method, decoded)
-	if err != nil {
-		return nil, err
-	}
-	return marshalProxy(resp)
-}
-
-func marshalProxy(r events.APIGatewayProxyResponse) ([]byte, error) {
-	return json.Marshal(r)
+	return coreHandler(ctx, method, decoded)
 }
 
 func main() {
