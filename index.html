@@ -447,7 +447,6 @@ footer strong{color:#e8cece;}
 <footer>
   <strong>ИЛЬЯ &amp; ВИТАЛИНА</strong><br>
   <span style="display:block;margin-top:8px;">24 · 07 · 2026</span>
-  <span style="display:block;margin-top:4px;font-size:10px;">ilya-vitalina.ru</span>
 </footer>
 
 </div><!-- end #main-content -->
@@ -529,18 +528,6 @@ async function submitForm(){
     btn.disabled=false;
     if(btn.textContent==='Отправка…')btn.textContent=prevText;
   }
-}
-
-// ── EDIT MODE ──
-let editMode=false;
-const editables=document.querySelectorAll('[contenteditable]');
-function toggleEdit(){
-  editMode=!editMode;
-  const btn=document.getElementById('editBtn');
-  editables.forEach(el=>el.contentEditable=editMode?'true':'false');
-  btn.textContent=editMode?'Сохранить':'Редактировать';
-  document.getElementById('edit-status').textContent=editMode?'✦ Редактирование включено':'✦ Сохранено';
-  if(!editMode)setTimeout(()=>{document.getElementById('edit-status').textContent='✦ ilya-vitalina.ru';},2000);
 }
 </script>
 </body>
