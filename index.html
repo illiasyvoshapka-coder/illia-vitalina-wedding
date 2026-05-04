@@ -43,13 +43,6 @@ body{font-family:'Montserrat',sans-serif;background:var(--cream);color:var(--dar
 @keyframes sealFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 @keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
 
-/* ── EDIT BAR ── */
-.edit-bar{position:sticky;top:0;z-index:2000;background:var(--dark);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:8px 28px;font-size:11px;letter-spacing:.5px;}
-.edit-bar span{color:#e8cece;}
-.edit-toggle{background:var(--red);color:#fff;border:none;padding:5px 18px;border-radius:20px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:500;cursor:pointer;}
-.edit-toggle:hover{background:var(--red2);}
-[contenteditable="true"]{outline:1.5px dashed var(--red);border-radius:2px;background:rgba(192,57,43,.06);cursor:text;}
-
 /* ── MARQUEE ── */
 .script-wrap{overflow:hidden;padding:14px 0;background:var(--cream);}
 .script{font-family:'Dancing Script',cursive;color:var(--red);font-size:clamp(24px,4vw,34px);white-space:nowrap;animation:marquee 20s linear infinite;display:inline-block;}
@@ -204,14 +197,6 @@ footer strong{color:#e8cece;}
 
 <!-- ══ MAIN CONTENT ══ -->
 <div id="main-content" style="display:none;">
-
-<!-- EDIT BAR -->
-<div class="edit-bar">
-  <span id="edit-status">✦ ilya-vitalina.ru</span>
-  <div style="display:flex;gap:10px;align-items:center;">
-    <button class="edit-toggle" id="editBtn" onclick="toggleEdit()">Редактировать</button>
-  </div>
-</div>
 
 <!-- HERO -->
 <section class="hero">
