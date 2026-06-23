@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Илья & Виталина — 24.07.2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Montserrat:wght@300;400;500;600&family=Dancing+Script:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --cream:#faf6f1;
+  --cream2:#f0e8df;
+  --red:#c0392b;
+  --red2:#96281b;
+  --red-glow:rgba(192,57,43,.35);
+  --dark:#1a1212;
+  --muted:#6b5b5b;
+  --light:#fff8f5;
+  --glass:rgba(255,255,255,.72);
+  --glass-strong:rgba(255,255,255,.88);
+  --glass-border:rgba(255,255,255,.65);
+  --shadow-sm:0 4px 24px rgba(26,18,18,.06);
+  --shadow-md:0 12px 40px rgba(26,18,18,.1);
+  --shadow-lg:0 24px 64px rgba(26,18,18,.12);
+  --radius:20px;
+  --radius-sm:14px;
+}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Montserrat',sans-serif;
+  color:var(--dark);
+  overflow-x:hidden;
+  background:var(--cream);
+  min-height:100vh;
+}
+
+/* ── AMBIENT BACKGROUND ── */
+.bg-scene{
+  position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+  background:
+    radial-gradient(ellipse 90% 60% at 10% -10%, rgba(192,57,43,.12) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 50% at 95% 20%, rgba(221,180,160,.18) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 40% at 50% 100%, rgba(192,57,43,.08) 0%, transparent 55%),
+    linear-gradient(165deg, #faf6f1 0%, #f3ebe3 45%, #efe4da 100%);
+}
+.bg-scene::before{
+  content:'';position:absolute;inset:0;
+  background-image:radial-gradient(rgba(192,57,43,.07) 1px, transparent 1px);
+  background-size:28px 28px;
+  mask-image:linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+  opacity:.5;
+}
+.orb{
+  position:absolute;border-radius:50%;filter:blur(60px);
+  animation:orbFloat 14s ease-in-out infinite;
+}
+.orb-1{width:420px;height:420px;background:rgba(192,57,43,.14);top:-120px;left:-80px;}
+.orb-2{width:360px;height:360px;background:rgba(255,200,180,.22);top:30%;right:-100px;animation-delay:-4s;}
+.orb-3{width:300px;height:300px;background:rgba(192,57,43,.1);bottom:10%;left:20%;animation-delay:-8s;}
+.orb-4{width:240px;height:240px;background:rgba(255,230,210,.25);bottom:-60px;right:25%;animation-delay:-2s;}
+@keyframes orbFloat{
+  0%,100%{transform:translate(0,0) scale(1);}
+  33%{transform:translate(20px,-30px) scale(1.05);}
+  66%{transform:translate(-15px,20px) scale(.97);}
+}
+
+/* ── INTRO ── */
+#intro-screen{
+  position:fixed;inset:0;z-index:9000;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  cursor:pointer;
+  transition:opacity .9s ease,transform .9s ease;
+  background:
+    radial-gradient(ellipse 80% 70% at 50% 40%, rgba(192,57,43,.15) 0%, transparent 60%),
+    linear-gradient(160deg, #faf6f1, #efe4da);
+}
+#intro-screen::before{
+  content:'';position:absolute;inset:0;
+  background-image:radial-gradient(rgba(192,57,43,.06) 1px, transparent 1px);
+  background-size:24px 24px;
+}
+#intro-screen.hidden{opacity:0;transform:scale(1.03);pointer-events:none;}
+.intro-label{
+  font-size:11px;letter-spacing:6px;text-transform:uppercase;color:var(--muted);
+  margin-bottom:32px;animation:fadeUp 1.2s ease;position:relative;z-index:1;
+}
+.seal-wrap{position:relative;display:flex;align-items:center;justify-content:center;z-index:1;}
+.seal-outer{
+  width:180px;height:180px;border-radius:50%;
+  border:1.5px solid rgba(192,57,43,.5);
+  display:flex;align-items:center;justify-content:center;position:relative;
+  animation:fadeUp 1s ease, sealFloat 3.5s ease-in-out infinite;
+  box-shadow:0 0 60px rgba(192,57,43,.2), inset 0 0 40px rgba(255,255,255,.3);
+  backdrop-filter:blur(8px);
+}
+.seal-outer::before,.seal-outer::after{
+  content:'';position:absolute;border-radius:50%;border:.5px solid rgba(192,57,43,.2);
+}
+.seal-outer::before{width:196px;height:196px;}
+.seal-outer::after{width:212px;height:212px;border-color:rgba(192,57,43,.1);}
+.seal-inner{
+  width:136px;height:136px;border-radius:50%;
+  background:linear-gradient(145deg, #d44637, var(--red2));
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  box-shadow:0 8px 32px rgba(192,57,43,.45), inset 0 1px 0 rgba(255,255,255,.25);
+}
+.seal-mono{font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:300;color:#fff;letter-spacing:2px;line-height:1;}
+.seal-date{font-size:9px;letter-spacing:3px;color:rgba(255,255,255,.85);text-transform:uppercase;margin-top:5px;}
+.click-hint{
+  font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--red);
+  margin-top:36px;display:flex;flex-direction:column;align-items:center;gap:10px;
+  animation:pulse 2.5s ease-in-out infinite;position:relative;z-index:1;
+}
+.click-hint::after{content:'';width:1px;height:32px;background:linear-gradient(to bottom,var(--red),transparent);opacity:.6;}
+
+/* ── MAIN WRAPPER ── */
+#main-content{position:relative;z-index:1;display:none;}
+
+/* ── MARQUEE ── */
+.script-wrap{
+  overflow:hidden;padding:16px 0;
+  background:linear-gradient(90deg, rgba(192,57,43,.06), rgba(255,255,255,.4), rgba(192,57,43,.06));
+  border-top:1px solid rgba(255,255,255,.6);
+  border-bottom:1px solid rgba(192,57,43,.08);
+  backdrop-filter:blur(12px);
+}
+.script{
+  font-family:'Dancing Script',cursive;color:var(--red);
+  font-size:clamp(24px,4vw,34px);white-space:nowrap;
+  animation:marquee 22s linear infinite;display:inline-block;
+  text-shadow:0 2px 12px rgba(192,57,43,.15);
+}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* ── COMMON ── */
+.sec-label{
+  display:inline-block;font-size:10px;letter-spacing:4px;text-transform:uppercase;
+  color:var(--red);margin-bottom:14px;
+  background:linear-gradient(135deg,rgba(192,57,43,.12),rgba(192,57,43,.04));
+  padding:6px 16px;border-radius:999px;border:1px solid rgba(192,57,43,.12);
+}
+.sec-title{
+  font-family:'Cormorant Garamond',serif;font-size:clamp(32px,6vw,42px);
+  font-weight:300;color:var(--dark);margin-bottom:20px;line-height:1.15;
+}
+.section-header{text-align:center;margin-bottom:48px;}
+.floral-divider{
+  text-align:center;color:var(--red);letter-spacing:10px;
+  padding:10px 0;opacity:.55;margin-bottom:22px;
+}
+.glass-card{
+  background:var(--glass);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border:1px solid var(--glass-border);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow-md);
+}
+.section-wave{
+  display:block;width:100%;height:64px;
+  background:transparent;
+}
+.section-wave path{fill:url(#waveGrad);}
+
+/* ── REVEAL ANIMATIONS ── */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-delay-1{transition-delay:.1s;}
+.reveal-delay-2{transition-delay:.2s;}
+.reveal-delay-3{transition-delay:.3s;}
+
+/* ── HERO ── */
+.hero{
+  padding:72px 24px 56px;text-align:center;position:relative;
+}
+.hero-inner{
+  max-width:720px;margin:0 auto;
+  padding:48px 32px 40px;
+  position:relative;overflow:hidden;
+}
+.hero-inner::before{
+  content:'';position:absolute;top:-50%;left:50%;transform:translateX(-50%);
+  width:400px;height:400px;border-radius:50%;
+  background:radial-gradient(circle, rgba(192,57,43,.1) 0%, transparent 70%);
+  pointer-events:none;
+}
+.hero-date{
+  font-size:13px;letter-spacing:3px;color:var(--muted);margin-bottom:24px;
+  position:relative;
+}
+.monogram-ring{
+  width:108px;height:108px;
+  border:1.5px solid rgba(192,57,43,.45);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 24px;
+  font-family:'Cormorant Garamond',serif;font-size:32px;color:var(--red);
+  font-weight:300;letter-spacing:2px;position:relative;
+  background:rgba(255,255,255,.5);
+  box-shadow:0 8px 32px rgba(192,57,43,.12), inset 0 0 24px rgba(255,255,255,.5);
+}
+.monogram-ring::before,.monogram-ring::after{
+  content:'';position:absolute;border-radius:50%;border:.5px solid rgba(192,57,43,.2);
+}
+.monogram-ring::before{width:124px;height:124px;}
+.monogram-ring::after{width:140px;height:140px;border-color:rgba(192,57,43,.1);}
+.hero h1{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(58px,13vw,104px);font-weight:300;line-height:1.02;
+  color:var(--dark);letter-spacing:-1px;
+  background:linear-gradient(135deg, var(--dark) 30%, #4a3030 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-sub{
+  font-size:11px;letter-spacing:6px;text-transform:uppercase;
+  color:var(--muted);margin-top:18px;
+}
+.couple-photo-wrap{position:relative;display:inline-block;margin-top:36px;}
+.couple-polaroid{
+  background:var(--glass-strong);padding:14px 14px 48px;
+  box-shadow:var(--shadow-lg), 0 0 0 1px rgba(255,255,255,.8);
+  transform:rotate(-2deg);display:inline-block;max-width:280px;position:relative;
+  border-radius:4px;transition:transform .4s ease, box-shadow .4s ease;
+}
+.couple-polaroid:hover{transform:rotate(-1deg) translateY(-4px);box-shadow:0 32px 80px rgba(26,18,18,.16);}
+.couple-polaroid img{
+  width:252px;height:300px;object-fit:cover;object-position:top;
+  display:block;border-radius:2px;
+}
+.couple-polaroid .pol-caption{
+  position:absolute;bottom:12px;left:0;right:0;text-align:center;
+  font-family:'Dancing Script',cursive;font-size:18px;color:var(--muted);
+}
+.hero-accent{
+  position:absolute;bottom:-20px;right:-36px;width:160px;opacity:.8;
+}
+
+/* ── INVITE ── */
+.invite-section{padding:20px 24px 64px;}
+.invite{
+  max-width:960px;margin:0 auto;
+  display:flex;flex-wrap:wrap;align-items:stretch;justify-content:center;gap:40px;
+}
+.invite-text{
+  flex:1;min-width:260px;max-width:400px;
+  padding:36px 32px;
+}
+.invite-text h2{
+  font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:400;
+  line-height:1.2;margin-bottom:18px;
+}
+.invite-text p{font-size:13px;color:var(--muted);line-height:1.95;margin-bottom:18px;}
+.invite-date{
+  font-size:15px;font-weight:600;color:var(--dark);
+  padding:10px 18px;display:inline-block;
+  background:linear-gradient(135deg,rgba(192,57,43,.1),rgba(192,57,43,.04));
+  border-radius:999px;border:1px solid rgba(192,57,43,.15);
+}
+.cal-card{
+  padding:28px 30px;min-width:260px;
+  position:relative;overflow:hidden;
+}
+.cal-card::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:4px;
+  background:linear-gradient(90deg, var(--red), #e8847a, var(--red));
+}
+.cal-month{text-align:center;font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:400;margin-bottom:18px;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;text-align:center;}
+.cal-header{color:var(--muted);font-size:10px;letter-spacing:.5px;padding:2px;font-weight:500;}
+.cal-day{padding:5px 2px;font-size:12px;border-radius:8px;transition:background .2s;}
+.cal-day:not(.empty):not(.highlight):hover{background:rgba(192,57,43,.06);}
+.cal-day.highlight{
+  background:linear-gradient(135deg, var(--red), var(--red2));color:#fff;
+  border-radius:50%;width:28px;height:28px;
+  display:flex;align-items:center;justify-content:center;margin:0 auto;
+  box-shadow:0 4px 16px var(--red-glow);font-weight:500;
+}
+.cal-day.empty{opacity:0;}
+
+/* ── STORY ── */
+.story-section{
+  padding:80px 24px;text-align:center;position:relative;
+}
+.story-inner{
+  max-width:680px;margin:0 auto;padding:48px 40px;position:relative;
+}
+.story-inner::before{
+  content:'\201C';font-family:'Cormorant Garamond',serif;font-size:120px;
+  color:rgba(192,57,43,.1);position:absolute;top:-10px;left:24px;line-height:1;
+}
+.story-text{
+  font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:300;
+  font-style:italic;line-height:1.85;color:var(--muted);position:relative;
+}
+
+/* ── VENUE ── */
+.venue-section-wrap{padding:64px 24px;position:relative;}
+.venue-section{max-width:980px;margin:0 auto;}
+.venue-block{
+  display:flex;flex-wrap:wrap;align-items:center;gap:48px;
+  justify-content:center;margin-bottom:16px;
+}
+.venue-block.reverse{flex-direction:row-reverse;}
+.venue-visual{flex-shrink:0;width:300px;position:relative;}
+.venue-photo-card{
+  position:relative;border-radius:var(--radius);overflow:hidden;
+  box-shadow:var(--shadow-lg);
+  border:1px solid rgba(255,255,255,.7);
+  transform:rotate(-2deg);transition:transform .4s ease;
+}
+.venue-block.reverse .venue-photo-card{transform:rotate(2deg);}
+.venue-photo-card:hover{transform:rotate(0deg) scale(1.02);}
+.venue-photo-card img{width:100%;height:220px;object-fit:cover;display:block;}
+.venue-photo-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top, rgba(26,18,18,.55) 0%, transparent 50%);
+  pointer-events:none;
+}
+.venue-photo-badge{
+  position:absolute;bottom:16px;left:16px;
+  background:rgba(255,255,255,.92);backdrop-filter:blur(8px);
+  padding:8px 14px;border-radius:999px;
+  font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--red);font-weight:600;border:1px solid rgba(255,255,255,.8);
+}
+.venue-photo-glow{
+  position:absolute;inset:-20px;border-radius:calc(var(--radius) + 20px);
+  background:linear-gradient(135deg, rgba(192,57,43,.15), rgba(255,200,180,.2));
+  z-index:-1;filter:blur(20px);opacity:.7;
+}
+.venue-info{
+  flex:1;min-width:240px;max-width:380px;
+  padding:36px 32px;
+}
+.venue-info h3{
+  font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:400;
+  margin-bottom:14px;line-height:1.2;
+}
+.venue-addr{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.85;}
+.time-badge{
+  display:inline-block;
+  background:linear-gradient(135deg, var(--red), var(--red2));color:#fff;
+  padding:10px 24px;border-radius:999px;font-size:14px;font-weight:600;
+  margin-bottom:14px;letter-spacing:.5px;
+  box-shadow:0 6px 20px var(--red-glow);
+}
+.map-btn{
+  display:inline-block;background:rgba(255,255,255,.6);
+  border:1.5px solid rgba(192,57,43,.35);color:var(--red);
+  padding:10px 22px;border-radius:999px;font-size:12px;
+  font-family:'Montserrat',sans-serif;text-decoration:none;
+  letter-spacing:.5px;cursor:pointer;margin-left:10px;
+  transition:all .25s ease;backdrop-filter:blur(8px);font-weight:500;
+}
+.map-btn:hover{background:var(--red);color:#fff;border-color:var(--red);box-shadow:0 6px 20px var(--red-glow);transform:translateY(-1px);}
+
+/* ── TIMELINE (vertical continuous line) ── */
+.tl-section{padding:80px 24px 72px;position:relative;}
+.tl-section::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 40% at 50% 50%, rgba(192,57,43,.04) 0%, transparent 70%);
+  pointer-events:none;
+}
+.timeline{
+  max-width:720px;margin:0 auto;position:relative;padding:8px 0;
+}
+.timeline-line{
+  position:absolute;left:50%;top:0;bottom:0;width:3px;
+  transform:translateX(-50%);
+  background:linear-gradient(180deg,
+    transparent 0%,
+    rgba(192,57,43,.25) 8%,
+    rgba(192,57,43,.45) 50%,
+    rgba(192,57,43,.25) 92%,
+    transparent 100%);
+  border-radius:3px;
+}
+.timeline-line::after{
+  content:'';position:absolute;inset:0;border-radius:3px;
+  background:linear-gradient(180deg, transparent, rgba(255,255,255,.6), transparent);
+  animation:lineShimmer 4s ease-in-out infinite;
+}
+@keyframes lineShimmer{
+  0%,100%{opacity:.3;}50%{opacity:.8;}
+}
+.tl-event{
+  display:grid;grid-template-columns:1fr 40px 1fr;
+  align-items:center;margin-bottom:0;padding:28px 0;
+  position:relative;
+}
+.tl-event:last-child{margin-bottom:0;}
+.tl-marker{
+  grid-column:2;display:flex;align-items:center;justify-content:center;
+  position:relative;z-index:2;
+}
+.tl-dot{
+  width:20px;height:20px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(145deg, #d44637, var(--red2));
+  border:4px solid var(--light);
+  box-shadow:0 0 0 4px rgba(192,57,43,.12), 0 4px 16px var(--red-glow);
+  transition:transform .3s ease, box-shadow .3s ease;
+}
+.tl-event.visible .tl-dot{animation:dotPop .5s ease forwards;}
+@keyframes dotPop{
+  0%{transform:scale(0);opacity:0;}
+  70%{transform:scale(1.2);}
+  100%{transform:scale(1);opacity:1;}
+}
+.tl-card{
+  padding:22px 26px;position:relative;
+  transition:transform .3s ease, box-shadow .3s ease;
+}
+.tl-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);}
+.tl-card time{
+  display:block;font-family:'Cormorant Garamond',serif;
+  font-size:36px;font-weight:300;color:var(--dark);line-height:1;margin-bottom:8px;
+}
+.tl-card p{font-size:12px;color:var(--muted);line-height:1.65;}
+.tl-card::before{
+  content:'';position:absolute;top:50%;width:20px;height:2px;
+  background:linear-gradient(90deg, rgba(192,57,43,.3), transparent);
+}
+.tl-left .tl-card{grid-column:1;justify-self:end;text-align:right;margin-right:8px;}
+.tl-left .tl-card::before{right:-20px;transform:translateY(-50%);}
+.tl-right .tl-card{grid-column:3;justify-self:start;text-align:left;margin-left:8px;}
+.tl-right .tl-card::before{left:-20px;transform:translateY(-50%) scaleX(-1);}
+
+/* ── COUNTDOWN ── */
+.cd-section{padding:80px 24px;text-align:center;}
+.cd-inner{max-width:680px;margin:0 auto;padding:48px 32px;}
+.cd-section h2{font-family:'Cormorant Garamond',serif;font-size:clamp(34px,6vw,42px);font-weight:300;margin-bottom:8px;}
+.cd-sub{font-size:12px;color:var(--muted);letter-spacing:3px;margin-bottom:40px;text-transform:uppercase;}
+.cd-row{display:flex;justify-content:center;flex-wrap:wrap;gap:16px;}
+.cd-block{
+  text-align:center;padding:20px 24px;min-width:100px;
+  border-radius:var(--radius-sm);
+  background:var(--glass);backdrop-filter:blur(16px);
+  border:1px solid var(--glass-border);box-shadow:var(--shadow-sm);
+  transition:transform .3s ease, box-shadow .3s ease;
+}
+.cd-block:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);}
+.cd-num{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(44px,9vw,68px);font-weight:300;color:var(--dark);line-height:1;
+  background:linear-gradient(135deg, var(--dark), #5a4040);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.cd-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-top:8px;font-weight:500;}
+.cd-sep{
+  display:flex;align-items:center;font-family:'Cormorant Garamond',serif;
+  font-size:40px;color:rgba(192,57,43,.25);padding:0 4px;align-self:center;
+}
+
+/* ── DRESSCODE ── */
+.dresscode-section{padding:80px 24px;text-align:center;}
+.dc-image-wrap{
+  max-width:520px;margin:0 auto 28px;position:relative;
+  border-radius:var(--radius);overflow:hidden;
+  box-shadow:var(--shadow-lg);border:1px solid rgba(255,255,255,.7);
+}
+.dc-image-wrap img{width:100%;display:block;}
+.dc-image-wrap::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to top, rgba(26,18,18,.15), transparent 40%);
+  pointer-events:none;
+}
+.dc-note{
+  font-size:12px;color:var(--red);letter-spacing:1px;margin-top:20px;
+  padding:12px 20px;display:inline-block;
+  background:rgba(192,57,43,.06);border-radius:999px;
+  border:1px solid rgba(192,57,43,.12);
+}
+
+/* ── GIFTS ── */
+.gifts-section{padding:80px 24px;text-align:center;}
+.gifts-inner{max-width:620px;margin:0 auto;padding:44px 36px;}
+.gifts-text{
+  font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;
+  font-style:italic;line-height:1.85;color:var(--muted);
+}
+
+/* ── FORM ── */
+.form-section{padding:80px 24px 96px;}
+.form-inner{
+  max-width:540px;margin:0 auto;padding:48px 40px;
+}
+.form-section h2{
+  font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:300;
+  color:var(--dark);text-align:center;margin-bottom:8px;
+}
+.form-section .fsub{text-align:center;color:var(--muted);font-size:12px;letter-spacing:1px;margin-bottom:40px;}
+.ff{margin-bottom:24px;}
+.ff label{
+  display:block;font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--red);margin-bottom:10px;font-weight:600;
+}
+.ff input,.ff textarea{
+  width:100%;background:rgba(255,255,255,.85);
+  border:1px solid rgba(216,200,192,.8);color:var(--dark);
+  padding:14px 16px;font-family:'Montserrat',sans-serif;font-size:13px;
+  border-radius:var(--radius-sm);outline:none;
+  transition:border-color .2s, box-shadow .2s, background .2s;
+}
+.ff input:focus,.ff textarea:focus{
+  border-color:rgba(192,57,43,.5);
+  box-shadow:0 0 0 4px rgba(192,57,43,.08);
+  background:#fff;
+}
+.ff input::placeholder,.ff textarea::placeholder{color:#bbb;}
+.radio-g{display:flex;flex-direction:column;gap:12px;}
+.radio-i{
+  display:flex;align-items:center;gap:12px;cursor:pointer;font-size:13px;
+  color:var(--dark);padding:12px 14px;border-radius:var(--radius-sm);
+  background:rgba(255,255,255,.5);border:1px solid rgba(216,200,192,.5);
+  transition:background .2s, border-color .2s;
+}
+.radio-i:hover{background:rgba(255,255,255,.85);border-color:rgba(192,57,43,.2);}
+.radio-i input{accent-color:var(--red);width:16px;height:16px;}
+.check-g{display:flex;flex-wrap:wrap;gap:10px;}
+.check-i{
+  display:flex;align-items:center;gap:8px;font-size:12px;color:var(--dark);
+  padding:8px 14px;border-radius:999px;
+  background:rgba(255,255,255,.55);border:1px solid rgba(216,200,192,.5);
+  cursor:pointer;transition:all .2s;
+}
+.check-i:hover{background:#fff;border-color:rgba(192,57,43,.25);}
+.check-i input{accent-color:var(--red);}
+#other-drink-wrap{margin-top:12px;display:none;}
+#plus-one-wrap{margin-top:12px;display:none;}
+.sbtn{
+  width:100%;
+  background:linear-gradient(135deg, var(--red), var(--red2));color:#fff;border:none;
+  padding:16px;font-family:'Montserrat',sans-serif;font-size:12px;
+  letter-spacing:3px;text-transform:uppercase;font-weight:600;cursor:pointer;
+  border-radius:var(--radius-sm);margin-top:12px;
+  box-shadow:0 8px 28px var(--red-glow);
+  transition:transform .2s, box-shadow .2s, opacity .2s;
+}
+.sbtn:hover{transform:translateY(-2px);box-shadow:0 12px 36px var(--red-glow);}
+.sbtn:disabled{opacity:.7;cursor:not-allowed;transform:none;}
+
+/* ── FOOTER ── */
+footer{
+  background:linear-gradient(160deg, #1a1212 0%, #2a1a1a 100%);
+  color:rgba(255,255,255,.35);text-align:center;
+  padding:48px 20px;font-size:11px;letter-spacing:3px;
+  border-top:1px solid rgba(255,255,255,.06);position:relative;
+}
+footer::before{
+  content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:120px;height:1px;
+  background:linear-gradient(90deg, transparent, rgba(192,57,43,.5), transparent);
+}
+footer strong{color:#e8cece;font-weight:500;}
+
+/* ── KEYFRAMES ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes sealFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes pulse{0%,100%{opacity:.45}50%{opacity:1}}
+
+/* ── RESPONSIVE ── */
+@media(max-width:700px){
+  .invite{flex-direction:column;align-items:stretch;}
+  .venue-block,.venue-block.reverse{flex-direction:column;align-items:center;}
+  .venue-visual{width:100%;max-width:320px;}
+  .timeline-line{left:24px;transform:none;}
+  .tl-event{
+    grid-template-columns:48px 1fr;gap:0;padding:20px 0;
+  }
+  .tl-marker{grid-column:1;grid-row:1;justify-content:flex-start;padding-left:15px;}
+  .tl-left .tl-card,.tl-right .tl-card{
+    grid-column:2;grid-row:1;
+    justify-self:stretch;margin:0;text-align:left;
+  }
+  .tl-card::before{display:none;}
+  .tl-card time{font-size:30px;}
+  .cd-sep{display:none;}
+  .cd-block{min-width:72px;padding:16px 14px;flex:1;}
+  .hero-inner,.story-inner,.venue-info,.form-inner{padding:32px 24px;}
+  .invite-text,.cal-card{padding:28px 24px;}
+}
+</style>
+</head>
+<body>
+
+<!-- Ambient background -->
+<div class="bg-scene" aria-hidden="true">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="orb orb-4"></div>
+</div>
+
+<!-- ══ INTRO SEAL ══ -->
+<div id="intro-screen" onclick="openSite()">
+  <p class="intro-label">Вы приглашены</p>
+  <div class="seal-wrap">
+    <div class="seal-outer">
+      <div class="seal-inner">
+        <div class="seal-mono">И&amp;В</div>
+        <div class="seal-date">24 · 07 · 2026</div>
+      </div>
+    </div>
+  </div>
+  <div class="click-hint">Нажмите на печать</div>
+</div>
+
+<!-- ══ MAIN CONTENT ══ -->
+<div id="main-content">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner glass-card reveal">
+    <div class="hero-date" contenteditable="false">24 июля, 2026 | 13:50</div>
+    <div class="monogram-ring">И&amp;В</div>
+    <h1 contenteditable="false">Илья<br>&amp; Виталина</h1>
+    <p class="hero-sub" contenteditable="false">Приглашение на свадьбу</p>
+    <div class="couple-photo-wrap">
+      <div class="couple-polaroid">
+        <img src="https://testbucketeuropa.s3.us-east-1.amazonaws.com/photo.jpg" alt="Илья и Виталина"/>
+        <div class="pol-caption">Илья &amp; Виталина</div>
+      </div>
+      <svg class="hero-accent" viewBox="0 0 150 44" fill="none" aria-hidden="true"><path d="M0 32 Q37 6 74 22 Q111 38 150 12" stroke="#c0392b" stroke-width="2" fill="none" opacity=".6"/></svg>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE 1 -->
+<div class="script-wrap">
+  <div class="script">I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp;</div>
+</div>
+
+<!-- INVITE + CALENDAR -->
+<section class="invite-section">
+  <div class="invite">
+    <div class="invite-text glass-card reveal">
+      <p class="sec-label">Дорогие друзья</p>
+      <h2 contenteditable="false">Дорогие наши<br>друзья и родные!</h2>
+      <p contenteditable="false">Это официальное приглашение на нашу свадьбу! А получили вы его потому, что мы очень хотим видеть вас в этот день рядом с нами!</p>
+      <div class="invite-date" contenteditable="false">24 июля, 2026 | 13:50</div>
+    </div>
+    <div class="cal-card glass-card reveal reveal-delay-1">
+      <div class="cal-month">Июль 2026</div>
+      <div class="cal-grid">
+        <div class="cal-header">ПН</div><div class="cal-header">ВТ</div><div class="cal-header">СР</div><div class="cal-header">ЧТ</div><div class="cal-header">ПТ</div><div class="cal-header">СБ</div><div class="cal-header">ВС</div>
+        <div class="cal-day empty"></div><div class="cal-day empty"></div><div class="cal-day">1</div><div class="cal-day">2</div><div class="cal-day">3</div><div class="cal-day">4</div><div class="cal-day">5</div>
+        <div class="cal-day">6</div><div class="cal-day">7</div><div class="cal-day">8</div><div class="cal-day">9</div><div class="cal-day">10</div><div class="cal-day">11</div><div class="cal-day">12</div>
+        <div class="cal-day">13</div><div class="cal-day">14</div><div class="cal-day">15</div><div class="cal-day">16</div><div class="cal-day">17</div><div class="cal-day">18</div><div class="cal-day">19</div>
+        <div class="cal-day">20</div><div class="cal-day">21</div><div class="cal-day">22</div><div class="cal-day">23</div><div class="cal-day highlight">24</div><div class="cal-day">25</div><div class="cal-day">26</div>
+        <div class="cal-day">27</div><div class="cal-day">28</div><div class="cal-day">29</div><div class="cal-day">30</div><div class="cal-day">31</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STORY -->
+<section class="story-section">
+  <div class="story-inner glass-card reveal">
+    <p class="sec-label">Наша история</p>
+    <h2 class="sec-title">Илья &amp; Виталина</h2>
+    <div class="floral-divider">— ✦ —</div>
+    <p class="story-text" contenteditable="false">Мы встретились совершенно случайно, но теперь знаем — это была судьба. Каждый прожитый вместе день убеждал нас, что мы созданы друг для друга. И вот настал момент, когда мы хотим разделить наше счастье с самыми близкими людьми.</p>
+  </div>
+</section>
+
+<!-- MARQUEE 2 -->
+<div class="script-wrap">
+  <div class="script">I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp;</div>
+</div>
+
+<!-- VENUE CEREMONY -->
+<section class="venue-section-wrap">
+  <div class="venue-section">
+    <div class="section-header reveal">
+      <p class="sec-label">Место проведения</p>
+      <h2 class="sec-title">Церемония</h2>
+    </div>
+    <div class="venue-block">
+      <div class="venue-visual reveal">
+        <div class="venue-photo-glow"></div>
+        <div class="venue-photo-card">
+          <img src="assets/zags.jpg" alt="Дворец торжеств" onerror="this.onerror=null;this.src='https://testbucketeuropa.s3.us-east-1.amazonaws.com/place.jpg'"/>
+          <div class="venue-photo-overlay"></div>
+          <span class="venue-photo-badge">ЗАГС</span>
+        </div>
+      </div>
+      <div class="venue-info glass-card reveal reveal-delay-1">
+        <h3 contenteditable="false">Место проведения<br>церемонии</h3>
+        <div class="venue-addr" contenteditable="false">Дворец торжеств<br>г. Набережные Челны, просп. Чулман, 73</div>
+        <div><span class="time-badge">13:50</span><a class="map-btn" href="https://yandex.ru/maps/-/CPSuaHop" target="_blank">Как добраться</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WAVE DIVIDER -->
+<svg class="section-wave" viewBox="0 0 1440 64" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" aria-hidden="true">
+  <defs>
+    <linearGradient id="waveGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="rgba(192,57,43,.08)"/>
+      <stop offset="50%" stop-color="rgba(255,255,255,.5)"/>
+      <stop offset="100%" stop-color="rgba(192,57,43,.08)"/>
+    </linearGradient>
+  </defs>
+  <path d="M0,32 C360,64 720,0 1080,32 C1260,48 1380,40 1440,32 L1440,64 L0,64 Z"/>
+</svg>
+
+<!-- MARQUEE 3 -->
+<div class="script-wrap">
+  <div class="script">I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp;</div>
+</div>
+
+<!-- VENUE BANQUET -->
+<section class="venue-section-wrap">
+  <div class="venue-section">
+    <div class="section-header reveal">
+      <h2 class="sec-title">Банкет</h2>
+    </div>
+    <div class="venue-block reverse">
+      <div class="venue-visual reveal">
+        <div class="venue-photo-glow"></div>
+        <div class="venue-photo-card">
+          <img src="assets/orlovskaya.jpg" alt="Орловская усадьба" onerror="this.onerror=null;this.src='https://testbucketeuropa.s3.us-east-1.amazonaws.com/orlovskaya.jpg'"/>
+          <div class="venue-photo-overlay"></div>
+          <span class="venue-photo-badge">Банкет</span>
+        </div>
+      </div>
+      <div class="venue-info glass-card reveal reveal-delay-1">
+        <h3 contenteditable="false">Место проведения<br>банкета</h3>
+        <div class="venue-addr" contenteditable="false">Орловская усадьба<br>Набережные Челны, пос. Орловка,<br>Орловская ул., 88А</div>
+        <div><span class="time-badge">16:30</span><a class="map-btn" href="https://yandex.ru/maps/-/CPSue0z1" target="_blank">Как добраться</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WAVE DIVIDER -->
+<svg class="section-wave" viewBox="0 0 1440 64" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M0,32 C360,0 720,64 1080,32 C1260,16 1380,24 1440,32 L1440,64 L0,64 Z" fill="url(#waveGrad)"/>
+</svg>
+
+<!-- TIMELINE -->
+<section class="tl-section">
+  <div class="section-header reveal">
+    <p class="sec-label">Расписание дня</p>
+    <h2 class="sec-title">Тайминг</h2>
+  </div>
+  <div class="timeline">
+    <div class="timeline-line" aria-hidden="true"></div>
+
+    <article class="tl-event tl-left reveal">
+      <div class="tl-marker"><span class="tl-dot"></span></div>
+      <div class="tl-card glass-card">
+        <time contenteditable="false">13:50</time>
+        <p contenteditable="false">Сбор гостей<br>у ЗАГСа</p>
+      </div>
+    </article>
+
+    <article class="tl-event tl-right reveal">
+      <div class="tl-marker"><span class="tl-dot"></span></div>
+      <div class="tl-card glass-card">
+        <time contenteditable="false">14:20</time>
+        <p contenteditable="false">Церемония<br>бракосочетания</p>
+      </div>
+    </article>
+
+    <article class="tl-event tl-left reveal">
+      <div class="tl-marker"><span class="tl-dot"></span></div>
+      <div class="tl-card glass-card">
+        <time contenteditable="false">16:30</time>
+        <p contenteditable="false">Сбор гостей<br>в Орловской усадьбе</p>
+      </div>
+    </article>
+
+    <article class="tl-event tl-right reveal">
+      <div class="tl-marker"><span class="tl-dot"></span></div>
+      <div class="tl-card glass-card">
+        <time contenteditable="false">17:00</time>
+        <p contenteditable="false">Начало<br>банкета</p>
+      </div>
+    </article>
+
+    <article class="tl-event tl-left reveal">
+      <div class="tl-marker"><span class="tl-dot"></span></div>
+      <div class="tl-card glass-card">
+        <time contenteditable="false">22:00</time>
+        <p contenteditable="false">Завершение<br>вечера</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- LOVE IS -->
+<div class="script-wrap">
+  <div class="script" style="font-size:clamp(20px,3.5vw,28px);">Love Is &nbsp;&nbsp; Love Is &nbsp;&nbsp; Love Is &nbsp;&nbsp; Love Is &nbsp;&nbsp; Love Is &nbsp;&nbsp; Love Is &nbsp;&nbsp; Love Is &nbsp;&nbsp; Love Is &nbsp;&nbsp; Love Is &nbsp;&nbsp; Love Is &nbsp;&nbsp;</div>
+</div>
+
+<!-- COUNTDOWN -->
+<section class="cd-section">
+  <div class="cd-inner glass-card reveal">
+    <h2>Мы скажем «Да»</h2>
+    <p class="cd-sub">через...</p>
+    <div class="cd-row">
+      <div class="cd-block"><div class="cd-num" id="cd-d">000</div><div class="cd-label">дней</div></div>
+      <span class="cd-sep">·</span>
+      <div class="cd-block"><div class="cd-num" id="cd-h">00</div><div class="cd-label">часов</div></div>
+      <span class="cd-sep">·</span>
+      <div class="cd-block"><div class="cd-num" id="cd-m">00</div><div class="cd-label">минут</div></div>
+      <span class="cd-sep">·</span>
+      <div class="cd-block"><div class="cd-num" id="cd-s">00</div><div class="cd-label">секунд</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- DRESSCODE -->
+<section class="dresscode-section">
+  <div class="section-header reveal">
+    <p class="sec-label">Дресс-код</p>
+    <h2 class="sec-title">Пожелания к образу</h2>
+    <div class="floral-divider">— ✦ —</div>
+  </div>
+  <div class="dc-image-wrap reveal">
+    <img src="https://testbucketeuropa.s3.us-east-1.amazonaws.com/imagedress.jpg" alt="Дресс-код"/>
+  </div>
+  <p class="dc-note reveal" contenteditable="false">Просим не выбирать белый цвет — он зарезервирован для невесты 🤍</p>
+</section>
+
+<!-- GIFTS -->
+<section class="gifts-section">
+  <div class="gifts-inner glass-card reveal">
+    <p class="sec-label">О подарках</p>
+    <h2 class="sec-title">С любовью — о деталях</h2>
+    <div class="floral-divider">— ✦ —</div>
+    <p class="gifts-text" contenteditable="false">Лучший подарок для нас — ваше присутствие и улыбки. Если вы всё же хотите порадовать нас, будем рады вкладу в наше свадебное путешествие или подарочному сертификату. Пусть ваши руки будут свободны для объятий.</p>
+  </div>
+</section>
+
+<!-- FORM -->
+<section class="form-section">
+  <div class="form-inner glass-card reveal">
+    <p style="text-align:center;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--red);margin-bottom:10px;font-weight:600;">Ответьте, пожалуйста</p>
+    <h2>Подтверждение</h2>
+    <p class="fsub" contenteditable="false">Пожалуйста, подтвердите своё присутствие до 01.07.2026</p>
+    <div class="ff">
+      <label>1. Ваше имя</label>
+      <input type="text" id="f-name" placeholder="Иван Иванов">
+    </div>
+    <div class="ff">
+      <label>2. Вы придёте?</label>
+      <div class="radio-g">
+        <label class="radio-i"><input type="radio" name="attend" value="yes"> Да, буду рад(а) вас поздравить</label>
+        <label class="radio-i"><input type="radio" name="attend" value="no"> К сожалению, не смогу присутствовать</label>
+      </div>
+      <div id="plus-one-wrap">
+        <input type="text" id="plus-one" placeholder="Со мной также будет...">
+      </div>
+    </div>
+    <div class="ff">
+      <label>3. Предпочтения по алкоголю</label>
+      <div class="check-g">
+        <label class="check-i"><input type="checkbox" class="alco" value="Шампанское"> Шампанское</label>
+        <label class="check-i"><input type="checkbox" class="alco" value="Вино"> Вино</label>
+        <label class="check-i"><input type="checkbox" class="alco" value="Виски"> Виски</label>
+        <label class="check-i"><input type="checkbox" class="alco" value="Коньяк"> Коньяк</label>
+        <label class="check-i"><input type="checkbox" class="alco" value="Водка"> Водка</label>
+        <label class="check-i"><input type="checkbox" class="alco" value="Не пью"> Не пью</label>
+        <label class="check-i"><input type="checkbox" class="alco" value="Другое" id="alco-other-cb" onchange="toggleOther(this)"> Другое</label>
+      </div>
+      <div id="other-drink-wrap">
+        <input type="text" id="other-drink" placeholder="Что будете пить?" style="margin-top:12px;">
+      </div>
+    </div>
+    <div class="ff">
+      <label>4. Ваши любимые треки</label>
+      <textarea id="f-tracks" rows="3" placeholder="Поделитесь треками, которые хотите услышать на нашем празднике"></textarea>
+    </div>
+    <button class="sbtn" id="sbtn" onclick="submitForm()">Отправить</button>
+  </div>
+</section>
+
+<footer>
+  <strong>ИЛЬЯ &amp; ВИТАЛИНА</strong><br>
+  <span style="display:block;margin-top:10px;">24 · 07 · 2026</span>
+</footer>
+
+</div><!-- end #main-content -->
+
+<script>
+const RSVP_API='https://na3walny0e.execute-api.us-east-1.amazonaws.com/prod/wedding-info';
+
+// ── INTRO ──
+function openSite(){
+  const intro=document.getElementById('intro-screen');
+  const main=document.getElementById('main-content');
+  intro.classList.add('hidden');
+  setTimeout(()=>{
+    intro.style.display='none';
+    main.style.display='block';
+    initReveal();
+  },800);
+}
+
+// ── SCROLL REVEAL ──
+function initReveal(){
+  const els=document.querySelectorAll('.reveal, .tl-event');
+  if(!('IntersectionObserver' in window)){
+    els.forEach(el=>el.classList.add('visible'));
+    return;
+  }
+  const obs=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('visible');
+        obs.unobserve(e.target);
+      }
+    });
+  },{threshold:.15,rootMargin:'0px 0px -40px 0px'});
+  els.forEach(el=>obs.observe(el));
+}
+
+// ── COUNTDOWN ──
+function updateCD(){
+  const target=new Date('2026-07-24T14:20:00');
+  const now=new Date();
+  let diff=Math.max(0,target-now);
+  document.getElementById('cd-d').textContent=String(Math.floor(diff/86400000)).padStart(3,'0');
+  document.getElementById('cd-h').textContent=String(Math.floor((diff%86400000)/3600000)).padStart(2,'0');
+  document.getElementById('cd-m').textContent=String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
+  document.getElementById('cd-s').textContent=String(Math.floor((diff%60000)/1000)).padStart(2,'0');
+}
+updateCD();setInterval(updateCD,1000);
+
+// ── OTHER DRINK ──
+function toggleOther(cb){
+  document.getElementById('other-drink-wrap').style.display=cb.checked?'block':'none';
+  if(!cb.checked) document.getElementById('other-drink').value='';
+}
+
+// ── PLUS ONE ──
+function togglePlusOneField(){
+  const attendEl=document.querySelector('input[name="attend"]:checked');
+  const wrap=document.getElementById('plus-one-wrap');
+  const input=document.getElementById('plus-one');
+  const show=attendEl&&attendEl.value==='yes';
+  wrap.style.display=show?'block':'none';
+  if(!show) input.value='';
+}
+document.querySelectorAll('input[name="attend"]').forEach(r=>r.addEventListener('change',togglePlusOneField));
+
+// ── FORM ──
+async function submitForm(){
+  const name=document.getElementById('f-name').value.trim();
+  const attendEl=document.querySelector('input[name="attend"]:checked');
+  if(!name){alert('Пожалуйста, введите ваше имя');return;}
+  if(!attendEl){alert('Пожалуйста, укажите, придёте ли вы');return;}
+  let alco=[...document.querySelectorAll('.alco:checked')].map(c=>c.value);
+  const otherVal=document.getElementById('other-drink').value.trim();
+  const plusOne=document.getElementById('plus-one').value.trim();
+  if(alco.includes('Другое')&&otherVal) alco=alco.map(v=>v==='Другое'?'Другое: '+otherVal:v);
+  const tracks=document.getElementById('f-tracks').value.trim();
+  const payload={id:Date.now(),name,attend:attendEl.value,plusOne,alco:alco.join(', '),tracks,date:new Date().toLocaleString('ru')};
+  const btn=document.getElementById('sbtn');
+  const prevText=btn.textContent;
+  btn.disabled=true;btn.textContent='Отправка…';
+  try{
+    const res=await fetch(RSVP_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    let msg='Не удалось отправить';
+    try{
+      const data=await res.json();
+      if(data&&data.error)msg=data.error;
+      else if(!res.ok)msg=typeof data==='string'?data:JSON.stringify(data);
+    }catch(_){ if(!res.ok)msg='Ошибка сервера ('+res.status+')'; }
+    if(!res.ok){alert(msg);return;}
+    btn.textContent='✦ Спасибо! Ответ отправлен';btn.style.background='linear-gradient(135deg,#27ae60,#2ecc71)';
+    document.getElementById('f-name').value='';document.getElementById('f-tracks').value='';document.getElementById('other-drink').value='';document.getElementById('plus-one').value='';
+    document.querySelectorAll('.alco').forEach(c=>c.checked=false);
+    document.querySelectorAll('input[name="attend"]').forEach(r=>r.checked=false);
+    document.getElementById('other-drink-wrap').style.display='none';
+    document.getElementById('plus-one-wrap').style.display='none';
+    setTimeout(()=>{btn.textContent=prevText;btn.style.background='';},4000);
+  }catch(e){
+    alert('Нет связи с сервером. Проверьте интернет и попробуйте снова.');
+  }finally{
+    btn.disabled=false;
+    if(btn.textContent==='Отправка…')btn.textContent=prevText;
+  }
+}
+</script>
+</body>
+</html>
