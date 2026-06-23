@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Илья & Виталина — 24.07.2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Montserrat:wght@300;400;500&family=Dancing+Script:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --cream:#f7f2ec;
+  --cream2:#efe8de;
+  --red:#c0392b;
+  --red2:#a93226;
+  --dark:#1a1212;
+  --muted:#6b5b5b;
+  --light:#fff8f5;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Montserrat',sans-serif;background:var(--cream);color:var(--dark);overflow-x:hidden;}
+
+/* ── SEAL / INTRO ── */
+#intro-screen{
+  position:fixed;inset:0;z-index:9000;
+  background:var(--cream);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  cursor:pointer;
+  transition:opacity .8s ease,transform .8s ease;
+}
+#intro-screen.hidden{opacity:0;transform:scale(1.04);pointer-events:none;}
+.intro-label{font-size:11px;letter-spacing:5px;text-transform:uppercase;color:var(--muted);margin-bottom:28px;animation:fadein 1.2s ease;}
+.seal-wrap{position:relative;display:flex;align-items:center;justify-content:center;}
+.seal-outer{width:170px;height:170px;border-radius:50%;border:1.5px solid var(--red);display:flex;align-items:center;justify-content:center;position:relative;animation:fadein 1s ease, sealFloat 3s ease-in-out infinite;}
+.seal-outer::before{content:'';position:absolute;width:185px;height:185px;border-radius:50%;border:.5px solid rgba(192,57,43,.3);}
+.seal-outer::after{content:'';position:absolute;width:200px;height:200px;border-radius:50%;border:.5px solid rgba(192,57,43,.15);}
+.seal-inner{width:130px;height:130px;border-radius:50%;background:var(--red);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 4px 24px rgba(192,57,43,.35);}
+.seal-mono{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;color:#fff;letter-spacing:2px;line-height:1;}
+.seal-date{font-size:9px;letter-spacing:3px;color:rgba(255,255,255,.8);text-transform:uppercase;margin-top:4px;}
+.seal-ring-text{position:absolute;width:170px;height:170px;}
+.click-hint{font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--red);margin-top:32px;display:flex;flex-direction:column;align-items:center;gap:8px;animation:pulse 2.5s ease-in-out infinite;}
+.click-hint::after{content:'';width:1px;height:28px;background:var(--red);opacity:.5;}
+@keyframes fadein{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes sealFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+
+/* ── MARQUEE ── */
+.script-wrap{overflow:hidden;padding:14px 0;background:var(--cream);}
+.script{font-family:'Dancing Script',cursive;color:var(--red);font-size:clamp(24px,4vw,34px);white-space:nowrap;animation:marquee 20s linear infinite;display:inline-block;}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* ── COMMON ── */
+.sec-label{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--red);margin-bottom:12px;}
+.sec-title{font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:300;color:var(--dark);margin-bottom:18px;line-height:1.2;}
+.floral-divider{text-align:center;color:var(--red);letter-spacing:8px;padding:8px 0;opacity:.6;margin-bottom:18px;}
+
+/* ── HERO ── */
+.hero{background:var(--cream);padding:56px 24px 40px;text-align:center;position:relative;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(192,57,43,.06) 0%,transparent 70%);pointer-events:none;}
+.hero-date{font-size:13px;letter-spacing:2px;color:var(--muted);margin-bottom:20px;}
+.monogram-ring{width:100px;height:100px;border:1.5px solid var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-family:'Cormorant Garamond',serif;font-size:30px;color:var(--red);font-weight:300;letter-spacing:2px;position:relative;}
+.monogram-ring::before{content:'';position:absolute;width:114px;height:114px;border:.5px solid rgba(192,57,43,.25);border-radius:50%;}
+.monogram-ring::after{content:'';position:absolute;width:128px;height:128px;border:.5px solid rgba(192,57,43,.12);border-radius:50%;}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(62px,14vw,108px);font-weight:300;line-height:1.05;color:var(--dark);letter-spacing:-1px;}
+.hero-sub{font-size:11px;letter-spacing:5px;text-transform:uppercase;color:var(--muted);margin-top:16px;}
+.couple-photo-wrap{position:relative;display:inline-block;margin-top:28px;}
+.couple-polaroid{background:#fff;padding:12px 12px 44px;box-shadow:3px 6px 24px rgba(0,0,0,.13);transform:rotate(-2deg);display:inline-block;max-width:260px;position:relative;}
+.couple-polaroid img{width:236px;height:280px;object-fit:cover;object-position:top;display:block;}
+.couple-polaroid .pol-caption{position:absolute;bottom:10px;left:0;right:0;text-align:center;font-family:'Dancing Script',cursive;font-size:16px;color:var(--muted);}
+
+/* ── INVITE ── */
+.invite{background:var(--cream);padding:64px 24px 40px;max-width:900px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:center;gap:48px;}
+.invite-text{flex:1;min-width:240px;max-width:360px;}
+.invite-text h2{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:400;line-height:1.2;margin-bottom:16px;}
+.invite-text p{font-size:13px;color:var(--muted);line-height:1.9;margin-bottom:16px;}
+.invite-date{font-size:15px;font-weight:500;color:var(--dark);}
+.cal-card{background:#fff;border:.5px solid #ddd;padding:22px 26px;border-radius:4px;min-width:240px;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+.cal-month{text-align:center;font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;margin-bottom:14px;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;text-align:center;}
+.cal-header{color:var(--muted);font-size:10px;letter-spacing:.5px;padding:2px;}
+.cal-day{padding:4px 2px;font-size:12px;}
+.cal-day.highlight{background:var(--red);color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;margin:0 auto;}
+.cal-day.empty{opacity:0;}
+
+/* ── STORY ── */
+.story-section{background:var(--light);padding:72px 24px;text-align:center;position:relative;border-top:.5px solid #e8ddd8;border-bottom:.5px solid #e8ddd8;}
+.story-section::before{content:'\201C';font-family:'Cormorant Garamond',serif;font-size:140px;color:rgba(192,57,43,.08);position:absolute;top:-20px;left:50%;transform:translateX(-50%);line-height:1;pointer-events:none;}
+.story-text{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;font-style:italic;line-height:1.8;color:var(--muted);max-width:560px;margin:0 auto;}
+
+/* ── VENUE ── */
+.venue-outer{background:var(--cream);padding:50px 24px;}
+.venue-section{max-width:960px;margin:0 auto;}
+.venue-block{display:flex;flex-wrap:wrap;align-items:flex-start;gap:40px;margin-bottom:10px;justify-content:center;}
+.venue-block.reverse{flex-direction:row-reverse;}
+
+/* Fixed envelope */
+.envelope-box{flex-shrink:0;width:240px;position:relative;}
+.env-roof{width:0;height:0;border-left:120px solid transparent;border-right:120px solid transparent;border-bottom:72px solid var(--red);display:block;}
+.env-wall{width:240px;height:64px;background:#ddc8c5;display:block;border-radius:0 0 4px 4px;}
+.pol-photo{background:#fff;padding:10px 10px 38px;box-shadow:2px 4px 20px rgba(0,0,0,.13);position:relative;z-index:2;margin:-16px auto 0;width:216px;transform:rotate(-3deg);}
+.pol-photo.flip{transform:rotate(3deg);}
+.pol-photo img{width:196px;height:136px;object-fit:cover;display:block;}
+
+.venue-info{flex:1;min-width:220px;max-width:360px;}
+.venue-info h3{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:400;margin-bottom:12px;line-height:1.2;}
+.venue-addr{font-size:13px;color:var(--muted);margin-bottom:22px;line-height:1.8;}
+.time-badge{display:inline-block;background:var(--red);color:#fff;padding:8px 22px;border-radius:20px;font-size:14px;font-weight:500;margin-bottom:14px;letter-spacing:.5px;}
+.map-btn{display:inline-block;background:transparent;border:1.5px solid var(--red);color:var(--red);padding:8px 20px;border-radius:20px;font-size:12px;font-family:'Montserrat',sans-serif;text-decoration:none;letter-spacing:.5px;cursor:pointer;margin-left:10px;transition:all .2s;}
+.map-btn:hover{background:var(--red);color:#fff;}
+
+/* ── TIMELINE SNAKE ── */
+.tl-section{background:var(--light);padding:72px 24px;text-align:center;border-top:.5px solid #e8ddd8;}
+.tl-section h2{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:300;margin-bottom:48px;}
+.snake{max-width:700px;margin:0 auto;position:relative;}
+.snake-row{display:flex;align-items:stretch;margin-bottom:0;}
+/* top row: left to right */
+.snake-row.ltr{flex-direction:row;}
+.snake-row.rtl{flex-direction:row-reverse;}
+.snake-item{flex:1;padding:20px 16px;position:relative;}
+.snake-item .s-time{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:300;color:var(--dark);line-height:1;}
+.snake-item .s-desc{font-size:12px;color:var(--muted);line-height:1.6;margin-top:6px;}
+.snake-dot{width:14px;height:14px;border-radius:50%;background:var(--red);flex-shrink:0;margin-top:22px;}
+/* horizontal connector */
+.snake-hline{flex:1;height:1px;background:#c8b0b0;align-self:flex-start;margin-top:29px;}
+/* vertical connector between rows */
+.snake-vconn{height:40px;position:relative;max-width:700px;margin:0 auto;}
+.snake-vconn .vline{position:absolute;top:0;bottom:0;width:1px;background:#c8b0b0;}
+.snake-vconn.right .vline{right:0;}
+.snake-vconn.left .vline{left:0;}
+
+/* ── COUNTDOWN ── */
+.cd-section{background:var(--cream);padding:72px 24px;text-align:center;}
+.cd-section h2{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:300;margin-bottom:8px;}
+.cd-sub{font-size:12px;color:var(--muted);letter-spacing:2px;margin-bottom:36px;}
+.cd-row{display:flex;justify-content:center;gap:0;}
+.cd-block{text-align:center;padding:0 28px;position:relative;}
+.cd-block+.cd-block::before{content:':';position:absolute;left:0;top:8px;transform:translateX(-50%);font-family:'Cormorant Garamond',serif;font-size:48px;color:#ccc;}
+.cd-num{font-family:'Cormorant Garamond',serif;font-size:clamp(52px,11vw,80px);font-weight:300;color:var(--dark);line-height:1;}
+.cd-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-top:6px;}
+
+/* ── DRESSCODE ── */
+.dresscode-section{background:var(--light);padding:72px 24px;border-top:.5px solid #e8ddd8;text-align:center;}
+.dc-image-wrap{max-width:500px;margin:0 auto 28px;}
+.dc-image-wrap img{width:100%;border-radius:4px;box-shadow:0 4px 20px rgba(0,0,0,.1);}
+.dc-note{font-size:12px;color:var(--red);letter-spacing:1px;margin-top:16px;}
+
+/* ── GIFTS ── */
+.gifts-section{background:var(--cream);padding:72px 24px;text-align:center;}
+.gifts-text{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;font-style:italic;line-height:1.8;color:var(--muted);max-width:540px;margin:0 auto;}
+
+/* ── FORM ── */
+.form-section{background:#faf6f1;padding:80px 24px;border-top:.5px solid #e8ddd8;}
+.form-inner{max-width:520px;margin:0 auto;}
+.form-section h2{font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:300;color:var(--dark);text-align:center;margin-bottom:8px;}
+.form-section .fsub{text-align:center;color:var(--muted);font-size:12px;letter-spacing:1px;margin-bottom:40px;}
+.ff{margin-bottom:22px;}
+.ff label{display:block;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:9px;}
+.ff input,.ff textarea{width:100%;background:#fff;border:.5px solid #d8c8c0;color:var(--dark);padding:13px 15px;font-family:'Montserrat',sans-serif;font-size:13px;border-radius:2px;outline:none;}
+.ff input:focus,.ff textarea:focus{border-color:var(--red);}
+.ff input::placeholder,.ff textarea::placeholder{color:#bbb;}
+.radio-g{display:flex;flex-direction:column;gap:11px;}
+.radio-i{display:flex;align-items:center;gap:11px;cursor:pointer;font-size:13px;color:var(--dark);}
+.radio-i input{accent-color:var(--red);width:16px;height:16px;}
+.check-g{display:flex;flex-wrap:wrap;gap:10px;}
+.check-i{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--dark);}
+.check-i input{accent-color:var(--red);}
+#other-drink-wrap{margin-top:12px;display:none;}
+#plus-one-wrap{margin-top:12px;display:none;}
+.sbtn{width:100%;background:var(--red);color:#fff;border:none;padding:15px;font-family:'Montserrat',sans-serif;font-size:12px;letter-spacing:3px;text-transform:uppercase;font-weight:500;cursor:pointer;border-radius:2px;margin-top:10px;}
+.sbtn:hover{background:var(--red2);}
+
+/* ── FOOTER ── */
+footer{background:var(--dark);color:rgba(255,255,255,.3);text-align:center;padding:36px 20px;font-size:11px;letter-spacing:2px;border-top:.5px solid rgba(255,255,255,.08);}
+footer strong{color:#e8cece;}
+
+@media(max-width:600px){
+  .invite{flex-direction:column;align-items:center;}
+  .venue-block,.venue-block.reverse{flex-direction:column;align-items:center;}
+  .snake-item .s-time{font-size:26px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ INTRO SEAL ══ -->
+<div id="intro-screen" onclick="openSite()">
+  <p class="intro-label">Вы приглашены</p>
+  <div class="seal-wrap">
+    <div class="seal-outer">
+      <div class="seal-inner">
+        <div class="seal-mono">И&amp;В</div>
+        <div class="seal-date">24 · 07 · 2026</div>
+      </div>
+    </div>
+  </div>
+  <div class="click-hint">Нажмите на печать</div>
+</div>
+
+<!-- ══ MAIN CONTENT ══ -->
+<div id="main-content" style="display:none;">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-date" contenteditable="false">24 июля, 2026 | 13:50</div>
+  <div class="monogram-ring">И&amp;В</div>
+  <h1 contenteditable="false">Илья<br>&amp; Виталина</h1>
+  <p class="hero-sub" contenteditable="false">Приглашение на свадьбу</p>
+  <div class="couple-photo-wrap">
+    <div class="couple-polaroid">
+      <img src="https://testbucketeuropa.s3.us-east-1.amazonaws.com/photo.jpg" alt="Илья и Виталина"/>
+      <div class="pol-caption">Илья &amp; Виталина</div>
+    </div>
+    <svg style="position:absolute;bottom:-16px;right:-32px;width:150px;" viewBox="0 0 150 44" fill="none"><path d="M0 32 Q37 6 74 22 Q111 38 150 12" stroke="#c0392b" stroke-width="2" fill="none"/></svg>
+  </div>
+</section>
+
+<!-- MARQUEE 1 -->
+<div class="script-wrap">
+  <div class="script">I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp;</div>
+</div>
+
+<!-- INVITE + CALENDAR -->
+<section style="background:var(--cream);padding:20px 0 0;">
+  <div class="invite">
+    <div class="invite-text">
+      <p class="sec-label">Дорогие друзья</p>
+      <h2 contenteditable="false">Дорогие наши<br>друзья и родные!</h2>
+      <p contenteditable="false">Это официальное приглашение на нашу свадьбу! А получили вы его потому, что мы очень хотим видеть вас в этот день рядом с нами!</p>
+      <div class="invite-date" contenteditable="false">24 июля, 2026 | 13:50</div>
+    </div>
+    <div class="cal-card">
+      <div class="cal-month">Июль 2026</div>
+      <div class="cal-grid">
+        <div class="cal-header">ПН</div><div class="cal-header">ВТ</div><div class="cal-header">СР</div><div class="cal-header">ЧТ</div><div class="cal-header">ПТ</div><div class="cal-header">СБ</div><div class="cal-header">ВС</div>
+        <div class="cal-day empty"></div><div class="cal-day empty"></div><div class="cal-day">1</div><div class="cal-day">2</div><div class="cal-day">3</div><div class="cal-day">4</div><div class="cal-day">5</div>
+        <div class="cal-day">6</div><div class="cal-day">7</div><div class="cal-day">8</div><div class="cal-day">9</div><div class="cal-day">10</div><div class="cal-day">11</div><div class="cal-day">12</div>
+        <div class="cal-day">13</div><div class="cal-day">14</div><div class="cal-day">15</div><div class="cal-day">16</div><div class="cal-day">17</div><div class="cal-day">18</div><div class="cal-day">19</div>
+        <div class="cal-day">20</div><div class="cal-day">21</div><div class="cal-day">22</div><div class="cal-day">23</div><div class="cal-day highlight">24</div><div class="cal-day">25</div><div class="cal-day">26</div>
+        <div class="cal-day">27</div><div class="cal-day">28</div><div class="cal-day">29</div><div class="cal-day">30</div><div class="cal-day">31</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STORY -->
+<section class="story-section">
+  <p class="sec-label" style="text-align:center;">Наша история</p>
+  <h2 class="sec-title" style="text-align:center;">Илья &amp; Виталина</h2>
+  <div class="floral-divider">— ✦ —</div>
+  <p class="story-text" contenteditable="false">Мы встретились совершенно случайно, но теперь знаем — это была судьба. Каждый прожитый вместе день убеждал нас, что мы созданы друг для друга. И вот настал момент, когда мы хотим разделить наше счастье с самыми близкими людьми.</p>
+</section>
+
+<!-- MARQUEE 2 -->
+<div class="script-wrap">
+  <div class="script">I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp;</div>
+</div>
+
+<!-- VENUE CEREMONY -->
+<div class="venue-outer">
+  <div class="venue-section">
+    <p class="sec-label" style="text-align:center;margin-bottom:32px;">Место проведения</p>
+    <div class="venue-block">
+      <div class="envelope-box">
+        <span class="env-roof"></span>
+        <span class="env-wall"></span>
+        <div class="pol-photo">
+          <img src="https://testbucketeuropa.s3.us-east-1.amazonaws.com/place.jpg" alt="Дворец торжеств"/>
+        </div>
+      </div>
+      <div class="venue-info">
+        <h3 contenteditable="false">Место проведения<br>церемонии</h3>
+        <div class="venue-addr" contenteditable="false">Дворец торжеств<br>г. Набережные Челны, просп. Чулман, 73</div>
+        <div><span class="time-badge">13:50</span><a class="map-btn" href="https://yandex.ru/maps/-/CPSuaHop" target="_blank">Как добраться</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WAVE -->
+<svg viewBox="0 0 1440 50" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block;width:100%;height:50px;background:var(--cream);"><path d="M0 25 Q360 50 720 25 Q1080 0 1440 25" stroke="#c0392b" stroke-width="1.5" fill="none"/></svg>
+
+<!-- MARQUEE 3 -->
+<div class="script-wrap">
+  <div class="script">I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp; I Love You &nbsp;&nbsp;</div>
+</div>
+
+<!-- VENUE BANQUET -->
+<div class="venue-outer" style="padding-top:20px;">
+  <div class="venue-section">
+    <div class="venue-block reverse">
+      <div class="envelope-box">
+        <span class="env-roof"></span>
+        <span class="env-wall"></span>
+        <div class="pol-photo flip">
+          <img src="https://testbucketeuropa.s3.us-east-1.amazonaws.com/orlovskaya.jpg" alt="Орловская усадьба"/>
+        </div>
+      </div>
+      <div class="venue-info">
+        <h3 contenteditable="false">Место проведения<br>банкета</h3>
+        <div class="venue-addr" contenteditable="false">Орловская усадьба<br>Набережные Челны, пос. Орловка,<br>Орловская ул., 88А</div>
+        <div><span class="time-badge">16:30</span><a class="map-btn" href="https://yandex.ru/maps/-/CPSue0z1" target="_blank">Как добраться</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WAVE -->
+<svg viewBox="0 0 1440 50" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block;width:100%;height:50px;background:var(--cream);"><path d="M0 25 Q360 0 720 25 Q1080 50 1440 25" stroke="#c0392b" stroke-width="1.5" fill="none"/></svg>
+
+<!-- TIMELINE SNAKE -->
+<section class="tl-section">
+  <h2>Тайминг</h2>
+  <div class="snake">
+    <!-- ROW 1: ltr — 3 items -->
+    <div class="snake-row ltr">
+      <div class="snake-item" style="text-align:left;">
+        <div class="s-time" contenteditable="false">13:50</div>
+        <div class="s-desc" contenteditable="false">Сбор гостей<br>у ЗАГСа</div>
+      </div>
+      <div class="snake-hline"></div>
+      <div class="snake-dot"></div>
+      <div class="snake-hline"></div>
+      <div class="snake-item" style="text-align:center;">
+        <div class="s-time" contenteditable="false">14:20</div>
+        <div class="s-desc" contenteditable="false">Церемония<br>бракосочетания</div>
+      </div>
+      <div class="snake-hline"></div>
+      <div class="snake-dot"></div>
+      <div class="snake-hline"></div>
+      <div class="snake-item" style="text-align:right;">
+        <div class="s-time" contenteditable="false">16:30</div>
+        <div class="s-desc" contenteditable="false">Сбор гостей<br>в Орловской усадьбе</div>
+      </div>
+    </div>
+    <!-- vertical right -->
+    <div class="snake-vconn right"><div class="vline"></div></div>
+    <!-- ROW 2: rtl — 2 items -->
+    <div class="snake-row rtl">
+      <div class="snake-item" style="text-align:right;">
+        <div class="s-time" contenteditable="false">17:00</div>
+        <div class="s-desc" contenteditable="false">Начало<br>банкета</div>
+      </div>
+      <div class="snake-hline"></div>
+      <div class="snake-dot"></div>
+      <div class="snake-hline"></div>
+      <div class="snake-item" style="text-align:left;">
+        <div class="s-time" contenteditable="false">22:00</div>
+        <div class="s-desc" contenteditable="false">Завершение<br>вечера</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOVE IS -->
+<div class="script-wrap" style="background:var(--light);">
+  <div class="script" style="font-size:clamp(20px,3.5vw,28px);">Love Is &nbsp;&nbsp; Love Is &nbsp;&nbsp; Love Is &nbsp;&nbsp; Love Is &nbsp;&nbsp; Love Is &nbsp;&nbsp; Love Is &nbsp;&nbsp; Love Is &nbsp;&nbsp; Love Is &nbsp;&nbsp; Love Is &nbsp;&nbsp; Love Is &nbsp;&nbsp;</div>
+</div>
+
+<!-- COUNTDOWN -->
+<section class="cd-section">
+  <h2>Мы скажем «Да»</h2>
+  <p class="cd-sub">через...</p>
+  <div class="cd-row">
+    <div class="cd-block"><div class="cd-num" id="cd-d">000</div><div class="cd-label">дней</div></div>
+    <div class="cd-block"><div class="cd-num" id="cd-h">00</div><div class="cd-label">часов</div></div>
+    <div class="cd-block"><div class="cd-num" id="cd-m">00</div><div class="cd-label">минут</div></div>
+    <div class="cd-block"><div class="cd-num" id="cd-s">00</div><div class="cd-label">секунд</div></div>
+  </div>
+</section>
+
+<!-- DRESSCODE -->
+<section class="dresscode-section">
+  <p class="sec-label">Дресс-код</p>
+  <h2 class="sec-title">Пожелания к образу</h2>
+  <div class="floral-divider">— ✦ —</div>
+  <div class="dc-image-wrap">
+    <img src="https://testbucketeuropa.s3.us-east-1.amazonaws.com/imagedress.jpg" alt="Дресс-код"/>
+  </div>
+  <p class="dc-note" contenteditable="false">Просим не выбирать белый цвет — он зарезервирован для невесты 🤍</p>
+</section>
+
+<!-- GIFTS -->
+<section class="gifts-section">
+  <p class="sec-label" style="text-align:center;">О подарках</p>
+  <h2 class="sec-title" style="text-align:center;">С любовью — о деталях</h2>
+  <div class="floral-divider">— ✦ —</div>
+  <p class="gifts-text" contenteditable="false">Лучший подарок для нас — ваше присутствие и улыбки. Если вы всё же хотите порадовать нас, будем рады вкладу в наше свадебное путешествие или подарочному сертификату. Пусть ваши руки будут свободны для объятий.</p>
+</section>
+
+<!-- FORM -->
+<section class="form-section">
+  <div class="form-inner">
+    <p style="text-align:center;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--red);margin-bottom:10px;">Ответьте, пожалуйста</p>
+    <h2>Подтверждение</h2>
+    <p class="fsub" contenteditable="false">Пожалуйста, подтвердите своё присутствие до 01.07.2026</p>
+    <div class="ff">
+      <label>1. Ваше имя</label>
+      <input type="text" id="f-name" placeholder="Иван Иванов">
+    </div>
+    <div class="ff">
+      <label>2. Вы придёте?</label>
+      <div class="radio-g">
+        <label class="radio-i"><input type="radio" name="attend" value="yes"> Да, буду рад(а) вас поздравить</label>
+        <label class="radio-i"><input type="radio" name="attend" value="no"> К сожалению, не смогу присутствовать</label>
+      </div>
+      <div id="plus-one-wrap">
+        <input type="text" id="plus-one" placeholder="Со мной также будет...">
+      </div>
+    </div>
+    <div class="ff">
+      <label>3. Предпочтения по алкоголю</label>
+      <div class="check-g">
+        <label class="check-i"><input type="checkbox" class="alco" value="Шампанское"> Шампанское</label>
+        <label class="check-i"><input type="checkbox" class="alco" value="Вино"> Вино</label>
+        <label class="check-i"><input type="checkbox" class="alco" value="Виски"> Виски</label>
+        <label class="check-i"><input type="checkbox" class="alco" value="Коньяк"> Коньяк</label>
+        <label class="check-i"><input type="checkbox" class="alco" value="Водка"> Водка</label>
+        <label class="check-i"><input type="checkbox" class="alco" value="Не пью"> Не пью</label>
+        <label class="check-i"><input type="checkbox" class="alco" value="Другое" id="alco-other-cb" onchange="toggleOther(this)"> Другое</label>
+      </div>
+      <div id="other-drink-wrap">
+        <input type="text" id="other-drink" placeholder="Что будете пить?" style="margin-top:12px;">
+      </div>
+    </div>
+    <div class="ff">
+      <label>4. Ваши любимые треки</label>
+      <textarea id="f-tracks" rows="3" placeholder="Поделитесь треками, которые хотите услышать на нашем празднике"></textarea>
+    </div>
+    <button class="sbtn" id="sbtn" onclick="submitForm()">Отправить</button>
+  </div>
+</section>
+
+<footer>
+  <strong>ИЛЬЯ &amp; ВИТАЛИНА</strong><br>
+  <span style="display:block;margin-top:8px;">24 · 07 · 2026</span>
+</footer>
+
+</div><!-- end #main-content -->
+
+<script>
+const RSVP_API='https://na3walny0e.execute-api.us-east-1.amazonaws.com/prod/wedding-info';
+
+// ── INTRO ──
+function openSite(){
+  const intro=document.getElementById('intro-screen');
+  const main=document.getElementById('main-content');
+  intro.classList.add('hidden');
+  setTimeout(()=>{intro.style.display='none';main.style.display='block';},800);
+}
+
+// ── COUNTDOWN ──
+function updateCD(){
+  const target=new Date('2026-07-24T14:20:00');
+  const now=new Date();
+  let diff=Math.max(0,target-now);
+  document.getElementById('cd-d').textContent=String(Math.floor(diff/86400000)).padStart(3,'0');
+  document.getElementById('cd-h').textContent=String(Math.floor((diff%86400000)/3600000)).padStart(2,'0');
+  document.getElementById('cd-m').textContent=String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
+  document.getElementById('cd-s').textContent=String(Math.floor((diff%60000)/1000)).padStart(2,'0');
+}
+updateCD();setInterval(updateCD,1000);
+
+// ── OTHER DRINK ──
+function toggleOther(cb){
+  document.getElementById('other-drink-wrap').style.display=cb.checked?'block':'none';
+  if(!cb.checked) document.getElementById('other-drink').value='';
+}
+
+// ── PLUS ONE ──
+function togglePlusOneField(){
+  const attendEl=document.querySelector('input[name="attend"]:checked');
+  const wrap=document.getElementById('plus-one-wrap');
+  const input=document.getElementById('plus-one');
+  const show=attendEl&&attendEl.value==='yes';
+  wrap.style.display=show?'block':'none';
+  if(!show) input.value='';
+}
+document.querySelectorAll('input[name="attend"]').forEach(r=>r.addEventListener('change',togglePlusOneField));
+
+// ── FORM ── (payload matches backend FormResponse: id, name, attend, plusOne, alco, tracks, date)
+async function submitForm(){
+  const name=document.getElementById('f-name').value.trim();
+  const attendEl=document.querySelector('input[name="attend"]:checked');
+  if(!name){alert('Пожалуйста, введите ваше имя');return;}
+  if(!attendEl){alert('Пожалуйста, укажите, придёте ли вы');return;}
+  let alco=[...document.querySelectorAll('.alco:checked')].map(c=>c.value);
+  const otherVal=document.getElementById('other-drink').value.trim();
+  const plusOne=document.getElementById('plus-one').value.trim();
+  if(alco.includes('Другое')&&otherVal) alco=alco.map(v=>v==='Другое'?'Другое: '+otherVal:v);
+  const tracks=document.getElementById('f-tracks').value.trim();
+  const payload={id:Date.now(),name,attend:attendEl.value,plusOne,alco:alco.join(', '),tracks,date:new Date().toLocaleString('ru')};
+  const btn=document.getElementById('sbtn');
+  const prevText=btn.textContent;
+  btn.disabled=true;btn.textContent='Отправка…';
+  try{
+    const res=await fetch(RSVP_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    let msg='Не удалось отправить';
+    try{
+      const data=await res.json();
+      if(data&&data.error)msg=data.error;
+      else if(!res.ok)msg=typeof data==='string'?data:JSON.stringify(data);
+    }catch(_){ if(!res.ok)msg='Ошибка сервера ('+res.status+')'; }
+    if(!res.ok){alert(msg);return;}
+    btn.textContent='✦ Спасибо! Ответ отправлен';btn.style.background='#2ecc71';
+    document.getElementById('f-name').value='';document.getElementById('f-tracks').value='';document.getElementById('other-drink').value='';document.getElementById('plus-one').value='';
+    document.querySelectorAll('.alco').forEach(c=>c.checked=false);
+    document.querySelectorAll('input[name="attend"]').forEach(r=>r.checked=false);
+    document.getElementById('other-drink-wrap').style.display='none';
+    document.getElementById('plus-one-wrap').style.display='none';
+    setTimeout(()=>{btn.textContent=prevText;btn.style.background='';},4000);
+  }catch(e){
+    alert('Нет связи с сервером. Проверьте интернет и попробуйте снова.');
+  }finally{
+    btn.disabled=false;
+    if(btn.textContent==='Отправка…')btn.textContent=prevText;
+  }
+}
+</script>
+</body>
+</html>
